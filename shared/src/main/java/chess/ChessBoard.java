@@ -48,7 +48,7 @@ public class ChessBoard {
     public void resetBoard() {
         for (int i = 0; i < 8; i++) {
             board[1][i] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
-            board[7][i] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+            board[6][i] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
         }
         resetBackRow(board, ChessGame.TeamColor.WHITE, 1);
         resetBackRow(board, ChessGame.TeamColor.BLACK, 8);
