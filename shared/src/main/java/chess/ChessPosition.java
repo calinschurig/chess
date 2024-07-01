@@ -9,12 +9,12 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 public class ChessPosition {
-    int Row;
-    int Col;
+    int row;
+    int col;
 
     public ChessPosition(int row, int col) {
-    Row = row;
-    Col = col;
+    ChessPosition.this.row = row;
+    ChessPosition.this.col = col;
     }
 
     /**
@@ -22,7 +22,7 @@ public class ChessPosition {
      * 1 codes for the bottom row
      */
     public int getRow() {
-        return Row;
+        return row;
         //throw new RuntimeException("Not implemented");
     }
 
@@ -31,7 +31,7 @@ public class ChessPosition {
      * 1 codes for the left row
      */
     public int getColumn() {
-        return Col;
+        return col;
         //throw new RuntimeException("Not implemented");
     }
 
@@ -40,11 +40,11 @@ public class ChessPosition {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChessPosition that = (ChessPosition) o;
-        return Row == that.Row && Col == that.Col;
+        return row == that.row && col == that.col;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(Row, Col);
+        return Objects.hash(row, col);
     }
 }
