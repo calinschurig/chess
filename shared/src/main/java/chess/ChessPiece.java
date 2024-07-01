@@ -66,12 +66,15 @@ public class ChessPiece {
             case BISHOP -> {
                 return bishopMoves(board, myPosition);
             }
-            case null, default -> throw new RuntimeException("Not implemented");
+            case null, default -> {
+                return null;
+                // throw new RuntimeException("Not implemented");
+            }
         }
     }
 
     public Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
-        Collection<ChessMove> possibleMoves = List.of();
+        Collection<ChessMove> possibleMoves = (Collection<ChessMove>) new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
         for (int i = -1; i <= 1; i++) {
@@ -89,7 +92,7 @@ public class ChessPiece {
     }
 
     public Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition) {
-        Collection<ChessMove> possibleMoves = List.of();
+        Collection<ChessMove> possibleMoves = (Collection<ChessMove>) new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
         for (int i = -1; i <= 1; i++) {
@@ -109,7 +112,7 @@ public class ChessPiece {
     }
 
     public Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
-        Collection<ChessMove> possibleMoves = List.of();
+        Collection<ChessMove> possibleMoves = (Collection<ChessMove>) new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
         for (int i = -1; i <= 1; i++) {
@@ -129,7 +132,7 @@ public class ChessPiece {
     }
 
     public Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition) {
-        Collection<ChessMove> possibleMoves = List.of();
+        Collection<ChessMove> possibleMoves = (Collection<ChessMove>) new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
         for (int i = -1; i <= 1; i++) {
