@@ -2,6 +2,7 @@ package chess;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a single chess piece
@@ -15,6 +16,19 @@ public class ChessPiece {
     public ChessPiece(ChessGame.TeamColor pieceColor, PieceType type) {
     ChessPiece.this.color = pieceColor;
     ChessPiece.this.type = type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessPiece that = (ChessPiece) o;
+        return color == that.color && type == that.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(color, type);
     }
 
     /**
@@ -74,7 +88,7 @@ public class ChessPiece {
     }
 
     public Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
-        Collection<ChessMove> possibleMoves = (Collection<ChessMove>) new java.util.ArrayList<>(List.of());
+        Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
         for (int i = -1; i <= 1; i++) {
@@ -92,7 +106,7 @@ public class ChessPiece {
     }
 
     public Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition) {
-        Collection<ChessMove> possibleMoves = (Collection<ChessMove>) new java.util.ArrayList<>(List.of());
+        Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
         for (int i = -1; i <= 1; i++) {
@@ -112,7 +126,7 @@ public class ChessPiece {
     }
 
     public Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
-        Collection<ChessMove> possibleMoves = (Collection<ChessMove>) new java.util.ArrayList<>(List.of());
+        Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
         for (int i = -1; i <= 1; i++) {
@@ -132,7 +146,7 @@ public class ChessPiece {
     }
 
     public Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition) {
-        Collection<ChessMove> possibleMoves = (Collection<ChessMove>) new java.util.ArrayList<>(List.of());
+        Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
         for (int i = -1; i <= 1; i++) {
