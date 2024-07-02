@@ -80,6 +80,9 @@ public class ChessPiece {
             case BISHOP -> {
                 return bishopMoves(board, myPosition);
             }
+            case KNIGHT -> {
+                return knightMoves(board, myPosition);
+            }
             case null, default -> {
                 return null;
                 // throw new RuntimeException("Not implemented");
@@ -91,14 +94,17 @@ public class ChessPiece {
         Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                if (i == 0 && j == 0) break;
-
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                // if (i == 0 && j == 0) break;
                 ChessPosition newPosition = new ChessPosition(row+i,col+j);
-                if ( isValidMove(board, myPosition, newPosition) ) {
-                    ChessMove move = new ChessMove(myPosition, newPosition, null);
-                    possibleMoves.add(move);
+                // System.out.println("i: " + i + "\tj: " + j + "\tisValid: " + isValidMove(board, myPosition, newPosition) + "\tpiece: " + board.getPiece(newPosition));
+                ChessMove.moveType moveType = getMoveType(board, myPosition, newPosition);
+                switch (moveType) {
+                    case EMPTY , CAPTURE -> {
+                        ChessMove move = new ChessMove(myPosition, newPosition, null);
+                        possibleMoves.add(move);
+                    }
                 }
             }
         }
@@ -109,16 +115,27 @@ public class ChessPiece {
         Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                if (i == 0 && j == 0) break;
+        for (int i = -1; i <= 1; i+=1) {
+            for (int j = -1; j <= 1; j+=1) {
                 for (int distance = 1; distance < 8; distance++) {
                     ChessPosition newPosition = new ChessPosition(row+(i*distance),col+(j*distance));
-                    if ( isValidMove(board, myPosition, newPosition) ) {
-                        ChessMove move = new ChessMove(myPosition, newPosition, null);
-                        possibleMoves.add(move);
+                    ChessMove.moveType moveType = getMoveType(board, myPosition, newPosition);
+                    boolean shouldBreak = false;
+                    switch (moveType) {
+                        case EMPTY -> {
+                            ChessMove move = new ChessMove(myPosition, newPosition, null);
+                            possibleMoves.add(move);
+                        }
+                        case CAPTURE -> {
+                            shouldBreak = true;
+                            ChessMove move = new ChessMove(myPosition, newPosition, null);
+                            possibleMoves.add(move);
+                        }
+                        case null, default -> {
+                            shouldBreak = true;
+                        }
                     }
-                    else break;
+                    if (shouldBreak) break;
                 }
             }
         }
@@ -129,16 +146,27 @@ public class ChessPiece {
         Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                if (i == j || i == -j) break;
+        for (int i = -1; i <= 1; i+=2) {
+            for (int j = -1; j <= 1; j+=2) {
                 for (int distance = 1; distance < 8; distance++) {
-                    ChessPosition newPosition = new ChessPosition(row+(i*distance),col+(j*distance));
-                    if ( isValidMove(board, myPosition, newPosition) ) {
-                        ChessMove move = new ChessMove(myPosition, newPosition, null);
-                        possibleMoves.add(move);
+                    ChessPosition newPosition = new ChessPosition(row+((i+j)/2*distance),col+((i-j)/2*distance));
+                    ChessMove.moveType moveType = getMoveType(board, myPosition, newPosition);
+                    boolean shouldBreak = false;
+                    switch (moveType) {
+                        case EMPTY -> {
+                            ChessMove move = new ChessMove(myPosition, newPosition, null);
+                            possibleMoves.add(move);
+                        }
+                        case CAPTURE -> {
+                            shouldBreak = true;
+                            ChessMove move = new ChessMove(myPosition, newPosition, null);
+                            possibleMoves.add(move);
+                        }
+                        case null, default -> {
+                            shouldBreak = true;
+                        }
                     }
-                    else break;
+                    if (shouldBreak) break;
                 }
             }
         }
@@ -149,29 +177,76 @@ public class ChessPiece {
         Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
+        for (int i = -1; i <= 1; i+=2) {
+            for (int j = -1; j <= 1; j+=2) {
                 if (i != j && i != -j) break;
                 for (int distance = 1; distance < 8; distance++) {
                     ChessPosition newPosition = new ChessPosition(row+(i*distance),col+(j*distance));
-                    if ( isValidMove(board, myPosition, newPosition) ) {
-                        ChessMove move = new ChessMove(myPosition, newPosition, null);
-                        possibleMoves.add(move);
+                    ChessMove.moveType moveType = getMoveType(board, myPosition, newPosition);
+                    boolean shouldBreak = false;
+                    switch (moveType) {
+                        case EMPTY -> {
+                            ChessMove move = new ChessMove(myPosition, newPosition, null);
+                            possibleMoves.add(move);
+                        }
+                        case CAPTURE -> {
+                            shouldBreak = true;
+                            ChessMove move = new ChessMove(myPosition, newPosition, null);
+                            possibleMoves.add(move);
+                        }
+                        case null, default -> {
+                            shouldBreak = true;
+                        }
                     }
-                    else break;
+                    if (shouldBreak) break;
                 }
             }
         }
         return possibleMoves;
     }
 
-    private boolean isValidMove (ChessBoard board, ChessPosition myPosition, ChessPosition newPosition) {
-        if ( newPosition.getRow() > 8 || newPosition.getRow() < 1 ) return false;
-        if ( newPosition.getColumn() > 8 || newPosition.getColumn() < 1 ) return false;
-        if ( board.getPiece(newPosition) == null ) return true;
-
-        if ( board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor() ) return true;
-        else return false;
+    public Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition) {
+        Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
+        int row = myPosition.getRow();
+        int col = myPosition.getColumn();
+        int x = 1;
+        int y = 2;
+        for (int i = 0; i < 8; i++) {
+            switch (i) {
+                case 0 -> { x=1;  y=2; }
+                case 1 -> { x=1;  y=-2; }
+                case 2 -> { x=-1; y=2; }
+                case 3 -> { x=-1; y=-2; }
+                case 4 -> { x=2;  y=1; }
+                case 5 -> { x=2;  y=-1; }
+                case 6 -> { x=-2; y=1; }
+                case 7 -> { x=-2; y=-1; }
+            }
+            ChessPosition newPosition = new ChessPosition(row+x, col+y);
+            switch (getMoveType(board, myPosition, newPosition)) {
+                case EMPTY, CAPTURE -> {
+                    ChessMove move = new ChessMove(myPosition, newPosition, null);
+                    possibleMoves.add(move);
+                }
+            }
+        }
+        return possibleMoves;
     }
 
+    private ChessMove.moveType getMoveType (ChessBoard board, ChessPosition myPosition, ChessPosition newPosition) {
+        if ( newPosition.getRow() > 8 || newPosition.getRow() < 1 ) return ChessMove.moveType.INVALID;
+        if ( newPosition.getColumn() > 8 || newPosition.getColumn() < 1 ) return ChessMove.moveType.INVALID;
+        if ( board.getPiece(newPosition) == null ) return ChessMove.moveType.EMPTY;
+
+        if ( board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor() ) return ChessMove.moveType.CAPTURE;
+        else return ChessMove.moveType.INVALID;
+    }
+
+    @Override
+    public String toString() {
+        return "ChessPiece{" +
+                "color=" + color +
+                ", type=" + type +
+                '}';
+    }
 }
