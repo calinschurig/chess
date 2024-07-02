@@ -11,13 +11,22 @@ import java.util.Objects;
 public class ChessMove {
     ChessPosition start;
     ChessPosition end;
+//    ChessMove.moveType type;
     ChessPiece.PieceType promotion;
 
-    public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
+    public ChessMove(ChessPosition startPosition, ChessPosition endPosition, /*ChessMove.moveType moveType, */
                      ChessPiece.PieceType promotionPiece) {
         ChessMove.this.start = startPosition;
         ChessMove.this.end = endPosition;
+//        ChessMove.this.type = moveType;
         ChessMove.this.promotion = promotionPiece;
+    }
+
+    public enum moveType {
+        EMPTY,
+        CAPTURE,
+        INVALID,
+        UNDETERMINED
     }
 
     /**

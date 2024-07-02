@@ -15,7 +15,6 @@ public class ChessBoard {
 
     public ChessBoard() {
         board = new ChessPiece[8][8];
-        resetBoard();
     }
 
     /**
@@ -48,7 +47,12 @@ public class ChessBoard {
     public void resetBoard() {
         for (int i = 0; i < 8; i++) {
             board[1][i] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+            board[2][i] = null;
+            board[3][i] = null;
+            board[4][i] = null;
+            board[5][i] = null;
             board[6][i] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+
         }
         resetBackRow(board, ChessGame.TeamColor.WHITE, 1);
         resetBackRow(board, ChessGame.TeamColor.BLACK, 8);
