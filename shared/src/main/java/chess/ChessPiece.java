@@ -83,6 +83,9 @@ public class ChessPiece {
             case KNIGHT -> {
                 return knightMoves(board, myPosition);
             }
+            case PAWN -> {
+                return pawnMoves(board, myPosition);
+            }
             case null, default -> {
                 return null;
                 // throw new RuntimeException("Not implemented");
@@ -233,6 +236,49 @@ public class ChessPiece {
         return possibleMoves;
     }
 
+    public Collection<ChessMove> pawnMoves(ChessBoard board, ChessPosition myPosition) {
+        Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
+        int row = myPosition.getRow();
+        int col = myPosition.getColumn();
+        int defaultRow = 2;
+        int direction = 1;
+        if (board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {
+            defaultRow = 7;
+            direction = -1;
+        }
+        for (int i = -1; i <= 1; i+=1) {
+            ChessPosition newPosition = new ChessPosition(row+direction, col+i);
+            switch (getMoveType(board, myPosition, newPosition)) {
+                case EMPTY -> {
+                    if (i != 0) break;
+                    if (row+direction == 1 || row+direction == 8) {
+                        possibleMoves.addAll(promotionMoves(myPosition, newPosition));
+                    } else {
+                        ChessMove move = new ChessMove(myPosition, newPosition, null);
+                        possibleMoves.add(move);
+                    }
+                    if (row == defaultRow) {
+                        newPosition = new ChessPosition(row + 2*direction, col);
+                        if (getMoveType(board, myPosition, newPosition) == ChessMove.moveType.EMPTY) {
+                            ChessMove move = new ChessMove(myPosition, newPosition, null);
+                            possibleMoves.add(move);
+                        }
+                    }
+                }
+                case CAPTURE -> {
+                    if (i == 0) break;
+                    if (row+direction == 1 || row+direction == 8) {
+                        possibleMoves.addAll(promotionMoves(myPosition, newPosition));
+                    } else {
+                        ChessMove move = new ChessMove(myPosition, newPosition, null);
+                        possibleMoves.add(move);
+                    }
+                }
+            }
+        }
+        return possibleMoves;
+    }
+
     private ChessMove.moveType getMoveType (ChessBoard board, ChessPosition myPosition, ChessPosition newPosition) {
         if ( newPosition.getRow() > 8 || newPosition.getRow() < 1 ) return ChessMove.moveType.INVALID;
         if ( newPosition.getColumn() > 8 || newPosition.getColumn() < 1 ) return ChessMove.moveType.INVALID;
@@ -240,6 +286,21 @@ public class ChessPiece {
 
         if ( board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor() ) return ChessMove.moveType.CAPTURE;
         else return ChessMove.moveType.INVALID;
+    }
+
+    private Collection<ChessMove> promotionMoves(ChessPosition startPosition, ChessPosition endPosition) {
+        Collection<ChessMove> possiblePromotionMoves = new java.util.ArrayList<>(List.of());
+        for (int i = 0; i < 4; i++) {
+            ChessPiece.PieceType promotion = switch (i) {
+                case 0 -> PieceType.QUEEN;
+                case 1 -> PieceType.ROOK;
+                case 2 -> PieceType.BISHOP;
+                case 3 -> PieceType.KNIGHT;
+                default -> PieceType.QUEEN;
+            };
+            possiblePromotionMoves.add(new ChessMove(startPosition, endPosition, promotion));
+        }
+        return possiblePromotionMoves;
     }
 
     @Override
