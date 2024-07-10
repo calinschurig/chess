@@ -35,6 +35,11 @@ public class ChessPosition {
         //throw new RuntimeException("Not implemented");
     }
 
+    public ChessPosition rel(int relRow, int relCol) {
+        return new ChessPosition(row+relRow, col+relCol);
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -13,6 +13,8 @@ public class ChessMove {
     ChessPosition end;
 //    ChessMove.moveType type;
     ChessPiece.PieceType promotion;
+    boolean isCastle;
+    boolean isEnPassant;
 
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition, /*ChessMove.moveType moveType, */
                      ChessPiece.PieceType promotionPiece) {
@@ -20,6 +22,17 @@ public class ChessMove {
         ChessMove.this.end = endPosition;
 //        ChessMove.this.type = moveType;
         ChessMove.this.promotion = promotionPiece;
+        isCastle = false;
+        isEnPassant = false;
+    }
+    public ChessMove(ChessPosition startPosition, ChessPosition endPosition, /*ChessMove.moveType moveType, */
+                     ChessPiece.PieceType promotionPiece, boolean isCastle, boolean isEnPassant) {
+        ChessMove.this.start = startPosition;
+        ChessMove.this.end = endPosition;
+//        ChessMove.this.type = moveType;
+        ChessMove.this.promotion = promotionPiece;
+        ChessMove.this.isCastle = isCastle;
+        ChessMove.this.isEnPassant = isEnPassant;
     }
 
     public enum moveType {

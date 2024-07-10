@@ -13,10 +13,20 @@ import java.util.Objects;
 public class ChessPiece {
     ChessGame.TeamColor color;
     PieceType type;
+    boolean isNotMoved;
+
     public ChessPiece(ChessGame.TeamColor pieceColor, PieceType type) {
     ChessPiece.this.color = pieceColor;
     ChessPiece.this.type = type;
+    isNotMoved = true;
     }
+
+    public ChessPiece(ChessGame.TeamColor pieceColor, PieceType type, boolean isNotMoved) {
+        ChessPiece.this.color = pieceColor;
+        ChessPiece.this.type = type;
+        ChessPiece.this.isNotMoved = isNotMoved;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -59,6 +69,11 @@ public class ChessPiece {
         //throw new RuntimeException("Not implemented");
     }
 
+    public boolean isNotMoved() {
+        return isNotMoved;
+    }
+    public boolean isMoved() {return !isNotMoved; }
+
     /**
      * Calculates all the positions a chess piece can move to
      * Does not take into account moves that are illegal due to leaving the king in
@@ -97,8 +112,8 @@ public class ChessPiece {
         Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
                 // if (i == 0 && j == 0) break;
                 ChessPosition newPosition = new ChessPosition(row+i,col+j);
                 // System.out.println("i: " + i + "\tj: " + j + "\tisValid: " + isValidMove(board, myPosition, newPosition) + "\tpiece: " + board.getPiece(newPosition));
