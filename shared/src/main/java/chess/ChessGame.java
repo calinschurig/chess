@@ -1,6 +1,9 @@
 package chess;
 
 import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Optional;
+import java.lang.Math;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -9,16 +12,22 @@ import java.util.Collection;
  * signature of the existing methods.
  */
 public class ChessGame {
+    ChessBoard board;
+    ArrayList<ChessMove> moves;
+    TeamColor turn;
+
 
     public ChessGame() {
-
+        board = new ChessBoard();
+        moves = new ArrayList<>();
+        turn = TeamColor.WHITE;
     }
 
     /**
      * @return Which team's turn it is
      */
     public TeamColor getTeamTurn() {
-        throw new RuntimeException("Not implemented");
+        return turn;
     }
 
     /**
@@ -27,7 +36,7 @@ public class ChessGame {
      * @param team the team whose turn it is
      */
     public void setTeamTurn(TeamColor team) {
-        throw new RuntimeException("Not implemented");
+        turn = team;
     }
 
     /**
@@ -96,7 +105,7 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        throw new RuntimeException("Not implemented");
+        this.board = board;
     }
 
     /**
@@ -105,6 +114,42 @@ public class ChessGame {
      * @return the chessboard
      */
     public ChessBoard getBoard() {
-        throw new RuntimeException("Not implemented");
+        return board;
+    }
+
+    private Collection<ChessMove> castleMoves(ChessPosition kingPos) {
+        ArrayList<ChessMove> moves = new ArrayList<>();
+        ChessPiece piece = board.getPiece(kingPos);
+        if (piece.getPieceType() != ChessPiece.PieceType.KING) return moves;
+        else if (piece.isMoved()) return moves;
+        else if (isInCheck(piece.getTeamColor())) return moves;
+        for (int dir = -1; dir <= 1; dir+=2) { for (int dist = 1; dist <=4; dist++) {
+            ChessPiece relPiece = board.getPiece(kingPos.rel(0, dir*dist));
+            if (relPiece == null) continue;
+            else if (relPiece.getPieceType() == ChessPiece.PieceType.ROOK && relPiece.isNotMoved()) {
+                if (dist < 3) break;
+                moves.add(new ChessMove(
+                        kingPos, kingPos.rel(0, dir*2), null, true, false)
+                );
+            }
+        }}
+        return moves;
+    }
+
+    private java.util.Optional<ChessMove> enPresantMove(ChessPosition pawnPos) {
+        java.util.Optional<ChessMove> move = java.util.Optional.empty();
+        ChessPiece piece = board.getPiece(pawnPos);
+        if ( piece.getPieceType() != ChessPiece.PieceType.PAWN) return move;
+        ChessMove lastm = moves.getLast();
+        if ( board.getPiece(lastm.getEndPosition()).getPieceType() != ChessPiece.PieceType.PAWN ) return move;
+        ChessPosition lmend = lastm.getEndPosition();
+        ChessPosition lmstart = lastm.getStartPosition();
+        if (!( Math.abs(lmend.getRow() - lmstart.getRow()) > 1 )) return move;
+        if ( lmend.getRow() != pawnPos.getRow() )  return move;
+        if ( Math.abs( lmend.getColumn() - pawnPos.getColumn() ) != 1 ) return move;
+        int dir = 1; if (board.getPiece(pawnPos).getTeamColor() == TeamColor.BLACK) dir = -1;
+        ChessMove moveEnPresant = new ChessMove(pawnPos, lmend.rel(dir, 0), null, false, true);
+        move = Optional.of( moveEnPresant );
+        return move;
     }
 }
