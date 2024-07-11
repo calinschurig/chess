@@ -28,6 +28,12 @@ public class ChessPiece {
         ChessPiece.this.isNotMoved = isNotMoved;
     }
 
+    public ChessPiece(ChessPiece another) {
+        this.color = another.color;
+        this.type = another.type;
+        this.isNotMoved = another.isNotMoved;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -69,11 +75,16 @@ public class ChessPiece {
         return type;
         //throw new RuntimeException("Not implemented");
     }
+    public void setPieceType(PieceType typeToSet) {
+        type = typeToSet;
+    }
+
 
     public boolean isNotMoved() {
         return isNotMoved;
     }
     public boolean isMoved() {return !isNotMoved; }
+    public void moved() { isNotMoved = false; }
 
     /**
      * Calculates all the positions a chess piece can move to
