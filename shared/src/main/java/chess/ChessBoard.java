@@ -1,7 +1,9 @@
 package chess;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Objects;
+import java.util.Map;
 
 /**
  * A chessboard that can hold and rearrange chess pieces.
@@ -12,9 +14,12 @@ import java.util.Objects;
 public class ChessBoard {
 
     ChessPiece[][] board;
+    HashMap<ChessPosition, ChessPiece> pieces;
 
     public ChessBoard() {
+
         board = new ChessPiece[8][8];
+        pieces = HashMap.newHashMap(50);
     }
 
     /**
@@ -25,6 +30,7 @@ public class ChessBoard {
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
         board[position.getRow()-1][position.getColumn()-1] = piece;
+        pieces.put(position, piece);
         // throw new RuntimeException("Not implemented");
     }
 
@@ -40,32 +46,46 @@ public class ChessBoard {
         // throw new RuntimeException("Not implemented");
     }
 
+    public Map<ChessPosition, ChessPiece> getPieces() {
+        return pieces;
+    }
+    public Map<ChessPosition, ChessPiece> getcPieces(ChessGame.TeamColor team) {
+        HashMap<ChessPosition, ChessPiece> cpieces = HashMap.newHashMap(16);
+        for (Map.Entry<ChessPosition, ChessPiece> entry : pieces.entrySet()) {
+            if (entry.getValue().getTeamColor() == team)
+                cpieces.put(entry.getKey(), entry.getValue());
+        }
+        return cpieces;
+    }
+    public Map<ChessPosition, ChessPiece> getbPieces() { return getcPieces(ChessGame.TeamColor.BLACK); }
+    public Map<ChessPosition, ChessPiece> getwPieces() { return getcPieces(ChessGame.TeamColor.WHITE); }
+
     /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
         for (int i = 0; i < 8; i++) {
-            board[1][i] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+            addPiece( new ChessPosition(2, i), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN) );
             board[2][i] = null;
             board[3][i] = null;
             board[4][i] = null;
             board[5][i] = null;
-            board[6][i] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+            addPiece( new ChessPosition(6, i), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN) );
         }
         resetBackRow(board, ChessGame.TeamColor.WHITE, 1);
         resetBackRow(board, ChessGame.TeamColor.BLACK, 8);
     }
 
     private void resetBackRow(ChessPiece[][] board, ChessGame.TeamColor color, int row) {
-        board[row-1][0] = new ChessPiece(color, ChessPiece.PieceType.ROOK);
-        board[row-1][1] = new ChessPiece(color, ChessPiece.PieceType.KNIGHT);
-        board[row-1][2] = new ChessPiece(color, ChessPiece.PieceType.BISHOP);
-        board[row-1][3] = new ChessPiece(color, ChessPiece.PieceType.QUEEN);
-        board[row-1][4] = new ChessPiece(color, ChessPiece.PieceType.KING);
-        board[row-1][5] = new ChessPiece(color, ChessPiece.PieceType.BISHOP);
-        board[row-1][6] = new ChessPiece(color, ChessPiece.PieceType.KNIGHT);
-        board[row-1][7] = new ChessPiece(color, ChessPiece.PieceType.ROOK);
+        addPiece( new ChessPosition(row, 1), new ChessPiece(color, ChessPiece.PieceType.ROOK) );
+        addPiece( new ChessPosition(row, 2), new ChessPiece(color, ChessPiece.PieceType.KNIGHT) );
+        addPiece( new ChessPosition(row, 3), new ChessPiece(color, ChessPiece.PieceType.BISHOP) );
+        addPiece( new ChessPosition(row, 4), new ChessPiece(color, ChessPiece.PieceType.QUEEN) );
+        addPiece( new ChessPosition(row, 5), new ChessPiece(color, ChessPiece.PieceType.KING) );
+        addPiece( new ChessPosition(row, 6), new ChessPiece(color, ChessPiece.PieceType.BISHOP) );
+        addPiece( new ChessPosition(row, 7), new ChessPiece(color, ChessPiece.PieceType.KNIGHT) );
+        addPiece( new ChessPosition(row, 8), new ChessPiece(color, ChessPiece.PieceType.ROOK) );
     }
 
     @Override
