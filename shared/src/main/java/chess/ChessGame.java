@@ -1,8 +1,6 @@
 package chess;
 
-import java.util.Collection;
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.*;
 import java.lang.Math;
 
 /**
@@ -105,7 +103,7 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        this.board = board;
+        ChessGame.this.board = board;
     }
 
     /**
@@ -136,8 +134,8 @@ public class ChessGame {
         return moves;
     }
 
-    private java.util.Optional<ChessMove> enPresantMove(ChessPosition pawnPos) {
-        java.util.Optional<ChessMove> move = java.util.Optional.empty();
+    private Optional<ChessMove> enPresantMove(ChessPosition pawnPos) {
+        Optional<ChessMove> move = Optional.empty();
         ChessPiece piece = board.getPiece(pawnPos);
         if ( piece.getPieceType() != ChessPiece.PieceType.PAWN) return move;
         ChessMove lastm = moves.getLast();
@@ -151,5 +149,17 @@ public class ChessGame {
         ChessMove moveEnPresant = new ChessMove(pawnPos, lmend.rel(dir, 0), null, false, true);
         move = Optional.of( moveEnPresant );
         return move;
+    }
+
+    private Set<ChessPosition> zoneOfControl(TeamColor team) {
+        HashSet<ChessPosition> zone = HashSet.newHashSet(32);
+        Map<ChessPosition, ChessPiece> cpieces =  board.getcPieces(team);
+        for (Map.Entry<ChessPosition, ChessPiece> entry : cpieces.entrySet()) {
+            Collection<ChessMove> moves = entry.getValue().myZoneOfControl(board, entry.getKey());
+            ArrayList<ChessPosition> ends = new ArrayList<>();
+            moves.forEach(move -> ends.add(move.getEndPosition()));
+            zone.addAll(ends);
+        }
+        return zone;
     }
 }
