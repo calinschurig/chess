@@ -64,7 +64,6 @@ public class ChessGame {
                 vmoves.remove(move);
             }
         }
-
         return vmoves;
 //        throw new RuntimeException("Not implemented");
     }
@@ -194,9 +193,16 @@ public class ChessGame {
         return cmoves;
     }
     private void makeCastleMove(ChessMove move, ChessBoard boardToTest) throws InvalidMoveException {
-        if ( !castleMoves(move.getStartPosition(), boardToTest).contains(move) ) return;
+        if ( !castleMoves(move.getStartPosition(), boardToTest).contains(move) ) throw new InvalidMoveException("Invalid Castle: " + move.toString());
         makeMove(move, boardToTest);
-        //TODO: move the rook as well.
+        ChessPosition kingPos = move.getEndPosition();
+        for (int i = -2; i <= 2; i++) {
+            int dir = (i < 0) ? -1 : 1;
+            if ( boardToTest.getPiece(kingPos.rel(0, i)).getPieceType() == ChessPiece.PieceType.ROOK
+            && boardToTest.getPiece(kingPos.rel(0, i)).isNotMoved()) {
+                makeMoveUnchecked( new ChessMove(kingPos.rel(0, i), kingPos.rel(0, -dir)), boardToTest );
+            }
+        }
         return;
     }
 
