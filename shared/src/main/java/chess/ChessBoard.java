@@ -83,12 +83,12 @@ public class ChessBoard {
      */
     public void resetBoard() {
         for (int i = 0; i < 8; i++) {
-            addPiece( new ChessPosition(2, i), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN) );
+            addPiece( new ChessPosition(2, i+1), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN) );
             board[2][i] = null;
             board[3][i] = null;
             board[4][i] = null;
             board[5][i] = null;
-            addPiece( new ChessPosition(6, i), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN) );
+            addPiece( new ChessPosition(6, i+1), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN) );
         }
         resetBackRow(board, ChessGame.TeamColor.WHITE, 1);
         resetBackRow(board, ChessGame.TeamColor.BLACK, 8);
