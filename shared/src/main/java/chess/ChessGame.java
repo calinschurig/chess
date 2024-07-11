@@ -87,11 +87,19 @@ public class ChessGame {
      */
     public boolean isInCheckmate(TeamColor teamColor) {
         if( !isInCheck(teamColor) ) return false;
-//        Set<ChessPosition> kingPos = board.getcPiecesOfType(ChessPiece.PieceType.KING, teamColor).keySet();
-//        Set<ChessPosition> strikeZone = zoneOfControl(other(teamColor));
-//        if (strikeZone.containsAll(kingPos)) return true;
-//        else return false;
-        throw new RuntimeException("Not implemented");
+        Map<ChessPosition, ChessPiece> kingPos = board.getcPiecesOfType(ChessPiece.PieceType.KING, teamColor);
+        HashSet<ChessMove> kingMoves = new HashSet<>();
+        HashSet<ChessPosition> kingEnds = new HashSet<>();
+        for (Map.Entry<ChessPosition, ChessPiece> entry : kingPos.entrySet()) {
+            kingMoves.addAll( entry.getValue().pieceMoves(board, entry.getKey()) );
+        }
+        for (ChessMove move : kingMoves) {
+            kingEnds.add(move.getEndPosition());
+        }
+
+        Set<ChessPosition> strikeZone = zoneOfControl(other(teamColor));
+        if (strikeZone.containsAll(kingEnds)) return true;
+        else return false;
     }
 
     /**
