@@ -73,7 +73,10 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        Set<ChessPosition> kingPos = board.getcPiecesOfType(ChessPiece.PieceType.KING, teamColor).keySet();
+        Set<ChessPosition> strikeZone = zoneOfControl(other(teamColor));
+        if (strikeZone.containsAll(kingPos)) return true;
+        else return false;
     }
 
     /**
@@ -83,6 +86,11 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
+        if( !isInCheck(teamColor) ) return false;
+//        Set<ChessPosition> kingPos = board.getcPiecesOfType(ChessPiece.PieceType.KING, teamColor).keySet();
+//        Set<ChessPosition> strikeZone = zoneOfControl(other(teamColor));
+//        if (strikeZone.containsAll(kingPos)) return true;
+//        else return false;
         throw new RuntimeException("Not implemented");
     }
 
@@ -94,7 +102,8 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        if (zoneOfControl(teamColor).isEmpty()) return true;
+        else return false;
     }
 
     /**
@@ -161,5 +170,13 @@ public class ChessGame {
             zone.addAll(ends);
         }
         return zone;
+    }
+
+    private TeamColor other(TeamColor team) {
+        switch (team) {
+            case WHITE -> { return TeamColor.BLACK; }
+            case BLACK -> { return TeamColor.WHITE; }
+            default -> {return null; }
+        }
     }
 }
