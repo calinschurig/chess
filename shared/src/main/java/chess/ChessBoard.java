@@ -1,9 +1,6 @@
 package chess;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A chessboard that can hold and rearrange chess pieces.
@@ -44,6 +41,10 @@ public class ChessBoard {
     public ChessPiece getPiece(ChessPosition position) {
         return board[position.getRow()-1][position.getColumn()-1];
         // throw new RuntimeException("Not implemented");
+    }
+
+    public Collection<ChessMove> getPieceMoves(ChessPosition startPosition) {
+        return getPiece(startPosition).pieceMoves(this, startPosition);
     }
 
     public Map<ChessPosition, ChessPiece> getPieces() {
