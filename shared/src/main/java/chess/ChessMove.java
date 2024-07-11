@@ -15,7 +15,9 @@ public class ChessMove {
     ChessPiece.PieceType promotion;
     boolean isCastle;
     boolean isEnPassant;
-
+    public ChessMove(ChessPosition startPosition, ChessPosition endPosition) {
+        this(startPosition, endPosition, null, false, false);
+    }
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition, /*ChessMove.moveType moveType, */
                      ChessPiece.PieceType promotionPiece) {
         ChessMove.this.start = startPosition;
