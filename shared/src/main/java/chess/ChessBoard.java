@@ -55,6 +55,10 @@ public class ChessBoard {
         return getPiece(startPosition).pieceMoves(this, startPosition);
     }
 
+    public ChessGame.TeamColor getPieceColor(ChessPosition startPosition) {
+        return getPiece(startPosition).getTeamColor();
+    }
+
     public Map<ChessPosition, ChessPiece> getPieces() {
         return pieces;
     }
