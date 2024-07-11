@@ -60,6 +60,22 @@ public class ChessBoard {
     public Map<ChessPosition, ChessPiece> getbPieces() { return getcPieces(ChessGame.TeamColor.BLACK); }
     public Map<ChessPosition, ChessPiece> getwPieces() { return getcPieces(ChessGame.TeamColor.WHITE); }
 
+    public Map<ChessPosition, ChessPiece> getPiecesOfType(ChessPiece.PieceType type) {
+        return getcPiecesOfType(type, false, ChessGame.TeamColor.WHITE);
+    }
+    public Map<ChessPosition, ChessPiece> getcPiecesOfType(ChessPiece.PieceType type, ChessGame.TeamColor teamColor) {
+        return getcPiecesOfType(type, true, teamColor);
+    }
+    private Map<ChessPosition, ChessPiece> getcPiecesOfType(ChessPiece.PieceType type, boolean isByTeam, ChessGame.TeamColor teamColor) {
+        HashMap<ChessPosition, ChessPiece> tcpieces = HashMap.newHashMap(16);
+        Map<ChessPosition, ChessPiece> cpieces = (isByTeam) ? getcPieces(teamColor) : pieces;
+        for (Map.Entry<ChessPosition, ChessPiece> entry : cpieces.entrySet()) {
+            if (entry.getValue().getPieceType() == type)
+                tcpieces.put(entry.getKey(), entry.getValue());
+        }
+        return tcpieces;
+    }
+
     /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
