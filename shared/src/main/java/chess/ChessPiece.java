@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -107,6 +108,23 @@ public class ChessPiece {
             }
         }
     }
+
+    public Collection<ChessMove> myZoneOfControl(ChessBoard board, ChessPosition myPosition) {
+        if (type != PieceType.PAWN) return pieceMoves(board, myPosition);
+        Collection<ChessMove> possibleMoves = new ArrayList<>(List.of());
+        int row = myPosition.getRow();
+        int col = myPosition.getColumn();
+        int direction = 1;
+        if (board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.BLACK) direction = -1;
+        for (int i = -1; i <= 1; i+=2) {
+            ChessPosition newPosition = new ChessPosition(row+direction, col+i);
+            switch (getMoveType(board, myPosition, newPosition)) {
+                case EMPTY, CAPTURE -> { possibleMoves.add(new ChessMove(myPosition, newPosition)); }
+            }
+        }
+        return possibleMoves;
+    }
+
 
     public Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
