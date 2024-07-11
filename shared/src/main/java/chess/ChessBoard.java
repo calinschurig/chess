@@ -14,9 +14,12 @@ public class ChessBoard {
     HashMap<ChessPosition, ChessPiece> pieces;
 
     public ChessBoard() {
-
         board = new ChessPiece[8][8];
         pieces = HashMap.newHashMap(50);
+    }
+    public ChessBoard(ChessBoard another) {
+        this.board = another.board;
+        this.pieces = another.pieces;
     }
 
     /**
@@ -29,6 +32,11 @@ public class ChessBoard {
         board[position.getRow()-1][position.getColumn()-1] = piece;
         pieces.put(position, piece);
         // throw new RuntimeException("Not implemented");
+    }
+    public ChessPiece removePiece(ChessPosition position) {
+        ChessPiece piece = getPiece(position);
+        board[position.getRow()-1][position.getColumn()-1] = null;
+        return piece;
     }
 
     /**
@@ -117,5 +125,7 @@ public class ChessBoard {
     public int hashCode() {
         return Arrays.deepHashCode(board);
     }
+
+
 }
 
