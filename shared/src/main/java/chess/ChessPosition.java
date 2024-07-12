@@ -36,7 +36,13 @@ public class ChessPosition {
     }
 
     public ChessPosition rel(int relRow, int relCol) {
-        return new ChessPosition(row+relRow, col+relCol);
+        int retRow = row + relRow;
+        int retCol = col + relCol;
+        if (retRow < 1) retRow = 1;
+        if (retRow > 8) retRow = 8;
+        if (retCol < 1) retCol = 1;
+        if (retCol > 8) retCol = 8;
+        return new ChessPosition(retRow, retCol);
     }
 
 
@@ -48,6 +54,7 @@ public class ChessPosition {
         return row == that.row && col == that.col;
     }
 
+
     @Override
     public int hashCode() {
         return Objects.hash(row, col);
@@ -55,9 +62,9 @@ public class ChessPosition {
 
     @Override
     public String toString() {
-        return "ChessPosition{" +
-                "row=" + row +
-                ", col=" + col +
-                '}';
+        return "(" +
+                row +
+                "," + col +
+                ')';
     }
 }
