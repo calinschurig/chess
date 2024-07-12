@@ -1,9 +1,6 @@
 package chess;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Represents a single chess piece
@@ -94,24 +91,27 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+        return pieceMoves(board, myPosition, false);
+    }
+    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition, boolean includeGuard) {
         switch (type) {
             case KING -> {
-                return kingMoves(board, myPosition);
+                return kingMoves(board, myPosition, includeGuard);
             }
             case QUEEN -> {
-                return queenMoves(board, myPosition);
+                return queenMoves(board, myPosition, includeGuard);
             }
             case ROOK -> {
-                return rookMoves(board, myPosition);
+                return rookMoves(board, myPosition, includeGuard);
             }
             case BISHOP -> {
-                return bishopMoves(board, myPosition);
+                return bishopMoves(board, myPosition, includeGuard);
             }
             case KNIGHT -> {
-                return knightMoves(board, myPosition);
+                return knightMoves(board, myPosition, includeGuard);
             }
             case PAWN -> {
-                return pawnMoves(board, myPosition);
+                return pawnMoves(board, myPosition, includeGuard);
             }
             case null, default -> {
                 return null;
@@ -121,8 +121,8 @@ public class ChessPiece {
     }
 
     public Collection<ChessMove> myZoneOfControl(ChessBoard board, ChessPosition myPosition) {
-        if (type != PieceType.PAWN) return pieceMoves(board, myPosition);
-        Collection<ChessMove> possibleMoves = new ArrayList<>(List.of());
+        if (type != PieceType.PAWN) return pieceMoves(board, myPosition, true);
+        HashSet<ChessMove> possibleMoves = new HashSet<>();
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
         int direction = 1;
@@ -130,7 +130,7 @@ public class ChessPiece {
         for (int i = -1; i <= 1; i+=2) {
             ChessPosition newPosition = new ChessPosition(row+direction, col+i);
             switch (getMoveType(board, myPosition, newPosition)) {
-                case EMPTY, CAPTURE -> { possibleMoves.add(new ChessMove(myPosition, newPosition)); }
+                case EMPTY, CAPTURE, GUARD -> { possibleMoves.add(new ChessMove(myPosition, newPosition)); }
             }
         }
         return possibleMoves;
@@ -138,6 +138,9 @@ public class ChessPiece {
 
 
     public Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
+        return kingMoves(board, myPosition, false);
+    }
+    public Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition, boolean includeGuard) {
         Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
@@ -159,11 +162,15 @@ public class ChessPiece {
     }
 
     public Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition) {
+        return queenMoves(board, myPosition, false);
+    }
+    public Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition, boolean includeGuard) {
         Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
         for (int i = -1; i <= 1; i+=1) {
             for (int j = -1; j <= 1; j+=1) {
+                if (i == 0 && j == 0) continue;
                 for (int distance = 1; distance < 8; distance++) {
                     ChessPosition newPosition = new ChessPosition(row+(i*distance),col+(j*distance));
                     ChessMove.moveType moveType = getMoveType(board, myPosition, newPosition);
@@ -178,6 +185,13 @@ public class ChessPiece {
                             ChessMove move = new ChessMove(myPosition, newPosition, null);
                             possibleMoves.add(move);
                         }
+                        case GUARD -> {
+                            shouldBreak = true;
+                            if (includeGuard) {
+                                ChessMove move = new ChessMove(myPosition, newPosition, null);
+                                possibleMoves.add(move);
+                            }
+                        }
                         case null, default -> {
                             shouldBreak = true;
                         }
@@ -190,6 +204,9 @@ public class ChessPiece {
     }
 
     public Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
+        return rookMoves(board, myPosition, false);
+    }
+    public Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition, boolean includeGuard) {
         Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
@@ -209,6 +226,13 @@ public class ChessPiece {
                             ChessMove move = new ChessMove(myPosition, newPosition, null);
                             possibleMoves.add(move);
                         }
+                        case GUARD -> {
+                            shouldBreak = true;
+                            if (includeGuard) {
+                                ChessMove move = new ChessMove(myPosition, newPosition, null);
+                                possibleMoves.add(move);
+                            }
+                        }
                         case null, default -> {
                             shouldBreak = true;
                         }
@@ -221,6 +245,9 @@ public class ChessPiece {
     }
 
     public Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition) {
+        return bishopMoves(board, myPosition, false);
+    }
+    public Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition, boolean includeGuard) {
         Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
@@ -241,6 +268,13 @@ public class ChessPiece {
                             ChessMove move = new ChessMove(myPosition, newPosition, null);
                             possibleMoves.add(move);
                         }
+                        case GUARD -> {
+                            shouldBreak = true;
+                            if (includeGuard) {
+                                ChessMove move = new ChessMove(myPosition, newPosition, null);
+                                possibleMoves.add(move);
+                            }
+                        }
                         case null, default -> {
                             shouldBreak = true;
                         }
@@ -251,8 +285,10 @@ public class ChessPiece {
         }
         return possibleMoves;
     }
-
     public Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition) {
+        return knightMoves(board, myPosition, false);
+    }
+    public Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition, boolean includeGuard) {
         Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
@@ -275,12 +311,21 @@ public class ChessPiece {
                     ChessMove move = new ChessMove(myPosition, newPosition, null);
                     possibleMoves.add(move);
                 }
+                case GUARD -> {
+                    if (includeGuard) {
+                        ChessMove move = new ChessMove(myPosition, newPosition, null);
+                        possibleMoves.add(move);
+                    }
+                }
             }
         }
         return possibleMoves;
     }
 
     public Collection<ChessMove> pawnMoves(ChessBoard board, ChessPosition myPosition) {
+        return pawnMoves(board, myPosition, false);
+    }
+    public Collection<ChessMove> pawnMoves(ChessBoard board, ChessPosition myPosition, boolean includeGuard) {
         Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
@@ -318,6 +363,17 @@ public class ChessPiece {
                         possibleMoves.add(move);
                     }
                 }
+                case GUARD -> {
+                    if (i == 0) break;
+                    if (includeGuard) {
+                        if (row+direction == 1 || row+direction == 8) {
+                            possibleMoves.addAll(promotionMoves(myPosition, newPosition));
+                        } else {
+                            ChessMove move = new ChessMove(myPosition, newPosition, null);
+                            possibleMoves.add(move);
+                        }
+                    }
+                }
             }
         }
         return possibleMoves;
@@ -326,10 +382,12 @@ public class ChessPiece {
     private ChessMove.moveType getMoveType (ChessBoard board, ChessPosition myPosition, ChessPosition newPosition) {
         if ( newPosition.getRow() > 8 || newPosition.getRow() < 1 ) return ChessMove.moveType.INVALID;
         if ( newPosition.getColumn() > 8 || newPosition.getColumn() < 1 ) return ChessMove.moveType.INVALID;
+        if (myPosition == newPosition) return ChessMove.moveType.INVALID;
         if ( board.getPiece(newPosition) == null ) return ChessMove.moveType.EMPTY;
 
+        if (board.getPiece(myPosition) == null) System.out.println("error: getMoveType myposition piece is null: " + myPosition);
         if ( board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor() ) return ChessMove.moveType.CAPTURE;
-        else return ChessMove.moveType.INVALID;
+        else return ChessMove.moveType.GUARD;
     }
 
     private Collection<ChessMove> promotionMoves(ChessPosition startPosition, ChessPosition endPosition) {
@@ -353,5 +411,21 @@ public class ChessPiece {
                 "color=" + color +
                 ", type=" + type +
                 '}';
+    }
+
+    public String shortToString() {
+        String toReturn;
+        if (color == ChessGame.TeamColor.WHITE) toReturn = "w";
+        else toReturn = "b";
+        switch (type) {
+            case KING -> toReturn += "K";
+            case QUEEN -> toReturn += "Q";
+            case ROOK -> toReturn += "R";
+            case BISHOP -> toReturn += "B";
+            case KNIGHT -> toReturn += "N";
+            case PAWN -> toReturn += "P";
+            case null -> toReturn += "null";
+        }
+        return toReturn;
     }
 }
