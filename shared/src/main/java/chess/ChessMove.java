@@ -40,6 +40,7 @@ public class ChessMove {
     public enum moveType {
         EMPTY,
         CAPTURE,
+        GUARD,
         INVALID,
         UNDETERMINED
     }
@@ -71,6 +72,17 @@ public class ChessMove {
 //        throw new RuntimeException("Not implemented");
     }
 
+    public ChessMove.moveType getMoveType (ChessBoard board, ChessPosition myPosition, ChessPosition newPosition) {
+        if ( newPosition.getRow() > 8 || end.getRow() < 1 ) return ChessMove.moveType.INVALID;
+        if ( newPosition.getColumn() > 8 || end.getColumn() < 1 ) return ChessMove.moveType.INVALID;
+        if ( board.getPiece(end) == null ) return ChessMove.moveType.EMPTY;
+
+        if (board.getPiece(start) == null) System.out.println("error: getMoveType myposition piece is null: " + myPosition);
+        if ( start == end ) return moveType.INVALID;
+        if ( board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor() ) return ChessMove.moveType.CAPTURE;
+        else return ChessMove.moveType.GUARD;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -82,5 +94,14 @@ public class ChessMove {
     @Override
     public int hashCode() {
         return Objects.hash(start, end, promotion);
+    }
+
+    @Override
+    public String toString() {
+        return "CM{" +
+                "p=" + promotion +
+                ", " + start.toString() +
+                " -> " + end.toString() +
+                '}';
     }
 }
