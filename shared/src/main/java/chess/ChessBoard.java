@@ -17,9 +17,16 @@ public class ChessBoard {
         board = new ChessPiece[8][8];
         pieces = HashMap.newHashMap(50);
     }
-    public ChessBoard(ChessBoard another) {
-        this.board = another.board;
-        this.pieces = another.pieces;
+
+    public static ChessBoard copy(ChessBoard another) {
+        ChessBoard newBoard = new ChessBoard();
+        for (int i = 0; i < 8; i++) { for (int j = 0; j < 8; j++) {
+            ChessPosition pos = new ChessPosition(i+1, j+1);
+            if (another.board[i][j] == null) newBoard.board[i][j] = null;
+            else newBoard.addPiece(pos, new ChessPiece( another.board[i][j] ) );
+        }}
+        return newBoard;
+//        this.pieces = another.pieces;
     }
 
     /**
@@ -30,12 +37,13 @@ public class ChessBoard {
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
         board[position.getRow()-1][position.getColumn()-1] = piece;
-        pieces.put(position, piece);
+        if (piece != null) pieces.put(position, piece);
         // throw new RuntimeException("Not implemented");
     }
     public ChessPiece removePiece(ChessPosition position) {
         ChessPiece piece = getPiece(position);
         board[position.getRow()-1][position.getColumn()-1] = null;
+        pieces.remove(position);
         return piece;
     }
 
@@ -50,8 +58,12 @@ public class ChessBoard {
         return board[position.getRow()-1][position.getColumn()-1];
         // throw new RuntimeException("Not implemented");
     }
+    public ChessPiece getPieceAt(int row, int col) {
+        return board[row-1][col-1];
+    }
 
     public Collection<ChessMove> getPieceMoves(ChessPosition startPosition) {
+        if ( getPiece(startPosition) == null ) return new ArrayList<ChessMove>();
         return getPiece(startPosition).pieceMoves(this, startPosition);
     }
 
@@ -100,7 +112,7 @@ public class ChessBoard {
             board[3][i] = null;
             board[4][i] = null;
             board[5][i] = null;
-            addPiece( new ChessPosition(6, i+1), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN) );
+            addPiece( new ChessPosition(7, i+1), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN) );
         }
         resetBackRow(board, ChessGame.TeamColor.WHITE, 1);
         resetBackRow(board, ChessGame.TeamColor.BLACK, 8);
@@ -130,6 +142,21 @@ public class ChessBoard {
         return Arrays.deepHashCode(board);
     }
 
-
+    @Override
+    public String toString() {
+        StringBuilder returnString = new StringBuilder("ChessBoard{ \n");
+        for (int i = 0; i < 8; i++) { for (int j = 0; j < 8; j++) {
+                if ( board[i][j] != null ) {
+                    returnString.append("|").append(board[i][j].shortToString());
+                } else {
+                    returnString.append("|  ");
+                }
+            }
+            returnString.append("|");
+            if (i != 7) returnString.append("\n");
+        }
+        returnString.append(" }\n");
+        return returnString.toString();
+    }
 }
 
