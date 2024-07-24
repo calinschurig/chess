@@ -14,10 +14,11 @@ public class GameService {
     }
 
     // returns the gameID.
-    public static int createGame(String gameName, GameDAO gameDAO) {
+    public static int createGame(String gameName, GameDAO gameDAO) throws DataAccessException {
         return createGame(gameName, gameDAO, 50);
     }
-    public static int createGame(String gameName, GameDAO gameDAO, int numTries) {
+    private static int createGame(String gameName, GameDAO gameDAO, int numTries) throws DataAccessException {
+        if (null == gameName || gameName.isBlank()) throw new DataAccessException("Invalid gameName");
         Random rand = new Random();
         for (int i = 0; i < numTries; i++) {
             int possibleGameID = 0;
