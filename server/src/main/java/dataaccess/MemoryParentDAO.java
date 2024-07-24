@@ -4,7 +4,8 @@ import java.util.Collection;
 import java.util.Map;
 
 public class MemoryParentDAO<K, V extends model.Identifier<K>> implements DataAccessInterface<K, V>{
-    private Map<K, V> db;
+    public Map<K, V> db;
+//    private static Map<K, V> staticdb;
 
     public V get(K id) {
         return db.get(id);
@@ -16,7 +17,7 @@ public class MemoryParentDAO<K, V extends model.Identifier<K>> implements DataAc
 
     public void update(K key, V value) throws DataAccessException {
         if ( !db.containsKey(key) ) throw new DataAccessException("Key: " + key + " isn't found in the database, unable to update it. ");
-        if ( db.containsKey(value.getId()) ) throw new DataAccessException("Unable to update value: " + value + " to key: " + value.getId() + " because that key already exists. ");
+        if ( db.containsKey(value.getId()) && key != value.getId()) throw new DataAccessException("Unable to update value: " + value + " to key: " + value.getId() + " because that key already exists. ");
         remove(key);
         add(value);
     }
