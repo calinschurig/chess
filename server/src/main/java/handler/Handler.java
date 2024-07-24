@@ -28,7 +28,7 @@ public class Handler {
     }
 
     private record JoinGameRequest(String playerColor, int gameID) {}
-    public Object joinGame(Request req, Response res) throws DataAccessException {
+    public Object joinGame(Request req, Response res) {
         JoinGameRequest gameRequest = new Gson().fromJson(req.body(), JoinGameRequest.class);
         String authToken = req.headers("authorization");
         String userName = authDAO.get(authToken).username();
@@ -66,7 +66,7 @@ public class Handler {
 
     private record CreateGameRequest(String gameName) {}
     private record CreateGameResult(int gameID) {}
-    public Object createGame(Request req, Response res) {
+    public Object createGame(Request req, Response res) throws DataAccessException {
         CreateGameRequest gameRequest = new Gson().fromJson(req.body(), CreateGameRequest.class);
         return new Gson().toJson(new CreateGameResult(GameService.createGame(gameRequest.gameName(), gameDAO)));
     }
