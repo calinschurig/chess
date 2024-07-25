@@ -16,9 +16,9 @@ import spark.Response;
 import java.util.Collection;
 
 public class Handler {
-    private UserDAO userDAO;
-    private GameDAO gameDAO;
-    private AuthDAO authDAO;
+    private final UserDAO userDAO;
+    private final GameDAO gameDAO;
+    private final AuthDAO authDAO;
 
     public Handler(UserDAO userDAO, GameDAO gameDAO, AuthDAO authDAO) {
         this.userDAO = userDAO;

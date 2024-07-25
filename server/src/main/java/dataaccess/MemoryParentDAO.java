@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MemoryParentDAO<K, V extends model.Identifier<K>> implements DataAccessInterface<K, V>{
-    private Map<K, V> db;
+    private final Map<K, V> db;
     public MemoryParentDAO() {
         this.db = new HashMap<>();
     }

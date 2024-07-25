@@ -50,12 +50,7 @@ public class UserService {
     }
 
     public static boolean isAuthorized(String authToken, AuthDAO authDAO) {
-        if ( null == authDAO.get(authToken) ) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        return null != authDAO.get(authToken);
     }
 
     public static String getUsername(String authToken, AuthDAO authDAO) throws DataAccessException {

@@ -14,7 +14,7 @@ import handler.Handler;
 import javax.xml.crypto.Data;
 
 public class Server {
-    private Handler handler;
+    private final Handler handler;
     public Server() {
         this.handler = new Handler(new MemoryUserDAO(), new MemoryGameDAO(), new MemoryAuthDAO());
     }

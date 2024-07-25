@@ -24,7 +24,9 @@ public class GameService {
         Random rand = new Random();
         for (int i = 0; i < numTries; i++) {
             int possibleGameID = 0;
-            while (possibleGameID <= 0) possibleGameID = rand.nextInt();
+            while (possibleGameID <= 0) {
+                possibleGameID = rand.nextInt();
+            }
 
             if (gameDAO.get(possibleGameID) == null ) {
                 GameData newGame = new GameData(possibleGameID, null, null, gameName, new ChessGame());
