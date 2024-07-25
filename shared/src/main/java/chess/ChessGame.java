@@ -53,7 +53,10 @@ public class ChessGame {
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         HashSet<ChessMove> vmoves = new HashSet<>();
-        if (board.getPiece(startPosition) == null) { System.out.println("returning early!"); return vmoves; }
+        if (board.getPiece(startPosition) == null) {
+            System.out.println("returning early!");
+            return vmoves;
+        }
         TeamColor color = board.getPieceColor(startPosition);
         vmoves.addAll(board.getPieceMoves(startPosition));
         enPresantMove(startPosition).ifPresent(moves::add);
@@ -272,7 +275,9 @@ public class ChessGame {
         if ( Math.abs( lmend.getColumn() - pawnPos.getColumn() ) != 1 ) {
             return epmove;
         }
-        int dir = 1; if (boardToTest.getPiece(pawnPos).getTeamColor() == TeamColor.BLACK) dir = -1;
+        int dir = 1; if (boardToTest.getPiece(pawnPos).getTeamColor() == TeamColor.BLACK) {
+            dir = -1;
+        }
         ChessMove moveEnPresant = new ChessMove(pawnPos, lmend.rel(dir, 0), null, false, true);
         epmove = Optional.of( moveEnPresant );
         return epmove;
@@ -319,16 +324,28 @@ public class ChessGame {
         sb.append("Zone{\n");
         for (int row = 1; row <= 8; row++) { for (int col = 1; col <= 8; col++) {
                 sb.append("|");
-                if (testBoard.getPieceAt(row, col) == null) sb.append(" ");
-                else {
-                    if (testBoard.getPieceAt(row, col).getTeamColor() == TeamColor.WHITE) sb.append("w");
-                    else sb.append("b");
+                if (testBoard.getPieceAt(row, col) == null) {
+                    sb.append(" ");
                 }
-                if (zone.contains(new ChessPosition(row, col))) sb.append("X");
-                else sb.append(" ");
+                else {
+                    if (testBoard.getPieceAt(row, col).getTeamColor() == TeamColor.WHITE) {
+                        sb.append("w");
+                    }
+                    else {
+                        sb.append("b");
+                    }
+                }
+                if (zone.contains(new ChessPosition(row, col))) {
+                    sb.append("X");
+                }
+                else {
+                    sb.append(" ");
+                }
             }
             sb.append("|");
-            if (row != 8) sb.append("\n");
+            if (row != 8) {
+                sb.append("\n");
+            }
         }
         sb.append(" }\n");
         return sb.toString();

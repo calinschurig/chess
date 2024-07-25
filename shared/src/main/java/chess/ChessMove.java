@@ -73,20 +73,37 @@ public class ChessMove {
     public MoveType getMoveType (ChessBoard board) {
         ChessPosition myPosition = getStartPosition();
         ChessPosition newPosition = getEndPosition();
-        if ( newPosition.getRow() > 8 || end.getRow() < 1 ) return MoveType.INVALID;
-        if ( newPosition.getColumn() > 8 || end.getColumn() < 1 ) return MoveType.INVALID;
-        if ( board.getPiece(end) == null ) return MoveType.EMPTY;
+        if ( newPosition.getRow() > 8 || end.getRow() < 1 ) {
+            return MoveType.INVALID;
+        }
+        if ( newPosition.getColumn() > 8 || end.getColumn() < 1 ) {
+            return MoveType.INVALID;
+        }
+        if ( board.getPiece(end) == null ) {
+            return MoveType.EMPTY;
+        }
 
-        if (board.getPiece(start) == null) System.out.println("error: getMoveType myposition piece is null: " + myPosition);
-        if ( start == end ) return MoveType.INVALID;
-        if ( board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor() ) return MoveType.CAPTURE;
-        else return MoveType.GUARD;
+        if (board.getPiece(start) == null) {
+            System.out.println("error: getMoveType myposition piece is null: " + myPosition);
+        }
+        if ( start == end ) {
+            return MoveType.INVALID;
+        }
+        if ( board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor() ) {
+            return MoveType.CAPTURE;
+        } else {
+            return MoveType.GUARD;
+        }
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ChessMove chessMove = (ChessMove) o;
         return Objects.equals(start, chessMove.start) && Objects.equals(end, chessMove.end) && promotion == chessMove.promotion;
     }

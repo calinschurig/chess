@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * Represents a single chess piece
@@ -422,4 +423,71 @@ public class ChessPiece {
         }
         return toReturn;
     }
+
+    private interface BinaryIntToBoolean {
+        boolean check(int i, int j);
+    }
+    Set<ChessMove> addMoves(BinaryIntToBoolean selectDirection, Function<Integer, Boolean> selectDistance,
+                            ChessBoard board, ChessPosition myPosition) {
+        Set<ChessMove> moves = new HashSet<>();
+        int[] dir = {-1, 0, 1};
+        for (int[] pair : permutations(dir, dir)) {
+            if (!selectDirection.check(pair[0], pair[1])) {
+                continue;
+            }
+
+        }
+        return moves;
+    }
+
+    Set<ChessMove> addMovesAtDistance(Function<Integer, Boolean> selectDistance, int[] direction,
+                                      ChessBoard board, ChessPosition myPosition, boolean includeGuard) {
+        Set<ChessMove> possibleMoves = new HashSet<>();
+        boolean shouldBreak = false;
+        for (int dist = 1; dist < 8; dist++) {
+            if (!selectDistance.apply(dist)) {
+                break;
+            }
+            ChessMove move = new ChessMove(
+                    myPosition,
+                    myPosition.rel(direction[0]*dist, direction[1]*dist)
+            );
+            ChessMove.MoveType moveType = move.getMoveType(board);
+            switch (moveType) {
+                case EMPTY -> {
+                    possibleMoves.add(move);
+                }
+                case CAPTURE -> {
+                    shouldBreak = true;
+                    possibleMoves.add(move);
+                }
+                case GUARD -> {
+                    shouldBreak = true;
+                    if (includeGuard) {
+                        possibleMoves.add(move);
+                    }
+                }
+                case null, default -> {
+                    shouldBreak = true;
+                }
+            }
+            if (shouldBreak) {
+                break;
+            }
+        }
+        return possibleMoves;
+    }
+
+
+
+    Set<int[]> permutations(int[] aList, int[] bList) {
+        Set<int[]> result = new HashSet<>();
+        for (int a : aList) {
+            for (int b : bList) {
+                result.add(new int[]{a, b});
+            }
+        }
+        return result;
+    }
+
 }

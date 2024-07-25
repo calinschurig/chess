@@ -22,7 +22,9 @@ public class ChessBoard {
         ChessBoard newBoard = new ChessBoard();
         for (int i = 0; i < 8; i++) { for (int j = 0; j < 8; j++) {
             ChessPosition pos = new ChessPosition(i+1, j+1);
-            if (another.board[i][j] == null) newBoard.board[i][j] = null;
+            if (another.board[i][j] == null) {
+                newBoard.board[i][j] = null;
+            }
             else newBoard.addPiece(pos, new ChessPiece( another.board[i][j] ) );
         }}
         return newBoard;
@@ -36,7 +38,9 @@ public class ChessBoard {
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
         board[position.getRow()-1][position.getColumn()-1] = piece;
-        if (piece != null) pieces.put(position, piece);
+        if (piece != null) {
+            pieces.put(position, piece);
+        }
     }
     public ChessPiece removePiece(ChessPosition position) {
         ChessPiece piece = getPiece(position);
@@ -60,7 +64,9 @@ public class ChessBoard {
     }
 
     public Collection<ChessMove> getPieceMoves(ChessPosition startPosition) {
-        if ( getPiece(startPosition) == null ) return new ArrayList<ChessMove>();
+        if ( getPiece(startPosition) == null ) {
+            return new ArrayList<ChessMove>();
+        }
         return getPiece(startPosition).pieceMoves(this, startPosition);
     }
 
@@ -71,8 +77,9 @@ public class ChessBoard {
     public Map<ChessPosition, ChessPiece> getcPieces(ChessGame.TeamColor team) {
         HashMap<ChessPosition, ChessPiece> cpieces = HashMap.newHashMap(16);
         for (Map.Entry<ChessPosition, ChessPiece> entry : pieces.entrySet()) {
-            if (entry.getValue().getTeamColor() == team)
+            if (entry.getValue().getTeamColor() == team) {
                 cpieces.put(entry.getKey(), entry.getValue());
+            }
         }
         return cpieces;
     }
@@ -83,8 +90,9 @@ public class ChessBoard {
         HashMap<ChessPosition, ChessPiece> tcpieces = HashMap.newHashMap(16);
         Map<ChessPosition, ChessPiece> cpieces = (isByTeam) ? getcPieces(teamColor) : pieces;
         for (Map.Entry<ChessPosition, ChessPiece> entry : cpieces.entrySet()) {
-            if (entry.getValue().getPieceType() == type)
+            if (entry.getValue().getPieceType() == type) {
                 tcpieces.put(entry.getKey(), entry.getValue());
+            }
         }
         return tcpieces;
     }
@@ -145,7 +153,9 @@ public class ChessBoard {
                 }
             }
             returnString.append("|");
-            if (i != 7) returnString.append("\n");
+            if (i != 7) {
+                returnString.append("\n");
+            }
         }
         returnString.append(" }\n");
         return returnString.toString();
