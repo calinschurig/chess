@@ -12,7 +12,6 @@ import service.GameService;
 import service.UserService;
 import spark.Request;
 import spark.Response;
-import spark.Spark;
 
 import java.util.Collection;
 
@@ -32,11 +31,13 @@ public class Handler {
         JoinGameRequest gameRequest = new Gson().fromJson(req.body(), JoinGameRequest.class);
         String authToken = req.headers("authorization");
         String userName = authDAO.get(authToken).username();
-//        System.out.println(userName);
         ChessGame.TeamColor color = null;
-        if (gameRequest.playerColor().equals("WHITE")) color = ChessGame.TeamColor.WHITE;
-        if (gameRequest.playerColor().equals("BLACK")) color = ChessGame.TeamColor.BLACK;
-//        System.out.println(gameRequest.playerColor());
+        if (gameRequest.playerColor().equals("WHITE")) {
+            color = ChessGame.TeamColor.WHITE;
+        }
+        if (gameRequest.playerColor().equals("BLACK")) {
+            color = ChessGame.TeamColor.BLACK;
+        }
 
         try {
             int gameID = GameService.joinGame(color, gameRequest.gameID(), userName, gameDAO);
@@ -53,14 +54,12 @@ public class Handler {
             if (e.getClass() == NullPointerException.class) {
                 res.status(400);
                 return new Gson().toJson(new Error("Error: bad request"));
-//                throw new NullPointerException(e.getMessage());
             }
             if (e.getClass() == JsonSyntaxException.class) {
                 res.status(400);
                 throw new BadRequestException("");
             }
             throw new RuntimeException(e);
-//            throw e;
         }
     }
 
@@ -103,7 +102,6 @@ public class Handler {
             } else  {
                 res.status(500);
                 return new Gson().toJson( new Error(e.getMessage()) );
-//                throw new DataAccessException(e.getMessage());
             }
         }
     }
@@ -115,7 +113,6 @@ public class Handler {
             throw new BadRequestException("Could not parse UserData from req.body(): " + req.body());
         }
         try {
-//            System.out.println("Line 29 ran!");
             return new Gson().toJson(UserService.register(userData, userDAO, authDAO));
         } catch (DataAccessException e) {
             if ( e.getMessage().contains("already taken") ) {
@@ -147,23 +144,10 @@ public class Handler {
     public void serverError(Exception e, Request req, Response res) {
         res.status(500);
         res.body(new Gson().toJson(new Error(e.getMessage())));
-//        return new Gson().toJson(new Error(e.getMessage()));
     }
     public void badRequestError(Exception e, Request req, Response res) {
-//        System.out.println("badRequestError called!");
         res.status(400);
         res.body(new Gson().toJson(new Error("Error: bad request")));
-//        Spark.halt(409);
-//        Spark.halt(400, new Gson().toJson(new Error("Error: bad request")));
-//        return null;
-//        return new Gson().toJson(new Error("bad request"));
-//        return "{ \"message\": \"Error: bad request\" }";
-    }
-    public Object notFoundError(Exception e, Request req, Response res) {
-        res.status(404);
-        Spark.halt(404, "not found");
-        return null;
-//        return new Gson().toJson( new Error(e.getMessage()));
     }
 
 }

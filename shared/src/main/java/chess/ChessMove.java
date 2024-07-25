@@ -11,23 +11,21 @@ import java.util.Objects;
 public class ChessMove {
     ChessPosition start;
     ChessPosition end;
-//    ChessMove.moveType type;
     ChessPiece.PieceType promotion;
     boolean isCastle;
     boolean isEnPassant;
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition) {
         this(startPosition, endPosition, null, false, false);
     }
-    public ChessMove(ChessPosition startPosition, ChessPosition endPosition, /*ChessMove.moveType moveType, */
+    public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
                      ChessPiece.PieceType promotionPiece) {
         ChessMove.this.start = startPosition;
         ChessMove.this.end = endPosition;
-//        ChessMove.this.type = moveType;
         ChessMove.this.promotion = promotionPiece;
         isCastle = false;
         isEnPassant = false;
     }
-    public ChessMove(ChessPosition startPosition, ChessPosition endPosition, /*ChessMove.moveType moveType, */
+    public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
                      ChessPiece.PieceType promotionPiece, boolean isCastle, boolean isEnPassant) {
         ChessMove.this.start = startPosition;
         ChessMove.this.end = endPosition;
@@ -37,7 +35,7 @@ public class ChessMove {
         ChessMove.this.isEnPassant = isEnPassant;
     }
 
-    public enum moveType {
+    public enum MoveType {
         EMPTY,
         CAPTURE,
         GUARD,
@@ -72,15 +70,17 @@ public class ChessMove {
 //        throw new RuntimeException("Not implemented");
     }
 
-    public ChessMove.moveType getMoveType (ChessBoard board, ChessPosition myPosition, ChessPosition newPosition) {
-        if ( newPosition.getRow() > 8 || end.getRow() < 1 ) return ChessMove.moveType.INVALID;
-        if ( newPosition.getColumn() > 8 || end.getColumn() < 1 ) return ChessMove.moveType.INVALID;
-        if ( board.getPiece(end) == null ) return ChessMove.moveType.EMPTY;
+    public MoveType getMoveType (ChessBoard board) {
+        ChessPosition myPosition = getStartPosition();
+        ChessPosition newPosition = getEndPosition();
+        if ( newPosition.getRow() > 8 || end.getRow() < 1 ) return MoveType.INVALID;
+        if ( newPosition.getColumn() > 8 || end.getColumn() < 1 ) return MoveType.INVALID;
+        if ( board.getPiece(end) == null ) return MoveType.EMPTY;
 
         if (board.getPiece(start) == null) System.out.println("error: getMoveType myposition piece is null: " + myPosition);
-        if ( start == end ) return moveType.INVALID;
-        if ( board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor() ) return ChessMove.moveType.CAPTURE;
-        else return ChessMove.moveType.GUARD;
+        if ( start == end ) return MoveType.INVALID;
+        if ( board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor() ) return MoveType.CAPTURE;
+        else return MoveType.GUARD;
     }
 
     @Override

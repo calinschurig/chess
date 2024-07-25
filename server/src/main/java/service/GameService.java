@@ -18,7 +18,9 @@ public class GameService {
         return createGame(gameName, gameDAO, 50);
     }
     private static int createGame(String gameName, GameDAO gameDAO, int numTries) throws DataAccessException {
-        if (null == gameName || gameName.isBlank()) throw new DataAccessException("Invalid gameName");
+        if (null == gameName || gameName.isBlank()) {
+            throw new DataAccessException("Invalid gameName");
+        }
         Random rand = new Random();
         for (int i = 0; i < numTries; i++) {
             int possibleGameID = 0;
@@ -34,13 +36,18 @@ public class GameService {
     }
 
     public static int joinGame(ChessGame.TeamColor playerColor, int gameID, String userName, GameDAO gameDAO) throws DataAccessException {
-        if ( null == gameDAO.get(gameID) ) throw new DataAccessException("Invalid game. No games with gameID: " + gameID + " exist. ");
+        if ( null == gameDAO.get(gameID) ) {
+            throw new DataAccessException("Invalid game. No games with gameID: " + gameID + " exist. ");
+        }
         GameData game = gameDAO.get(gameID);
         String colorUserName = switch (playerColor) {
             case WHITE -> game.whiteUsername();
             case BLACK -> game.blackUsername();
         };
-        if (null != colorUserName ) throw new DataAccessException("Cannot join game as color: " + playerColor + " because it is already taken by user: " + colorUserName);
+        if (null != colorUserName ) {
+            throw new DataAccessException("Cannot join game as color: " + playerColor
+                    + " because it is already taken by user: " + colorUserName);
+        }
         GameData updatedGame = switch (playerColor) {
             case WHITE -> new GameData(game.gameID(), userName, game.blackUsername(), game.gameName(), game.game());
             case BLACK -> new GameData(game.gameID(), game.whiteUsername(), userName, game.gameName(), game.game());

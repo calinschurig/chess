@@ -11,7 +11,6 @@ import java.lang.Math;
  */
 public class ChessGame {
     ChessBoard board;
-//    ChessBoard testBoard;
     ArrayList<ChessMove> moves;
     TeamColor turn;
 
@@ -19,7 +18,6 @@ public class ChessGame {
     public ChessGame() {
         board = new ChessBoard();
         board.resetBoard();
-//        testBoard = new ChessBoard(board);
         moves = new ArrayList<>();
         turn = TeamColor.WHITE;
     }
@@ -64,21 +62,14 @@ public class ChessGame {
         for (ChessMove move : vmoves) {
             ChessBoard testBoard = ChessBoard.copy(board);
             if (move.getStartPosition() != startPosition) System.out.println("Different start position! ");
-//            System.out.println("Before test move: " + testBoard.toString());
             makeMoveUnchecked(move, testBoard);
-//            System.out.println("After test move: " + testBoard.toString());
-//            System.out.println("isInCheck: " + isInCheck(color, testBoard));
-//            System.out.println("Removing piece: " + testBoard.removePiece(move.getStartPosition()));
-//            System.out.println( "zoneOfControl-other: " + zoneToString(zoneOfControl(other(color), testBoard), testBoard) );
             if (isInCheck(color, testBoard)) {
                 System.out.println("removing due to is in check");
                 removes.add(move);
             }
         }
         vmoves.removeAll(removes);
-//        System.out.println(vmoves);
         return vmoves;
-//        throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -94,14 +85,11 @@ public class ChessGame {
         if (boardToTest.getPiece(move.getStartPosition()) == null) throw new InvalidMoveException("No piece for move!");
         if (boardToTest == board && turn != boardToTest.getPieceColor(move.getStartPosition())) throw new InvalidMoveException("Out of turn move! ");
 
-//        System.out.println(validMoves(move.getStartPosition()));
         if (!validMoves(move.getStartPosition()).contains(move)) throw new InvalidMoveException("Invalid move: " + move.toString());
         makeMoveUnchecked(move, boardToTest);
     }
     private void makeMoveUnchecked(ChessMove move, ChessBoard boardToTest)  {
-//        if (!validMoves(move.getStartPosition()).contains(move)) throw new InvalidMoveException("Invalid move: " + move.toString());
         if (boardToTest.getPiece(move.getStartPosition()) == null) System.out.println("Null piece!");
-//        else System.out.println("Not Null Piece");
         ChessPiece piece = new ChessPiece(boardToTest.getPiece(move.getStartPosition()));
         if (move.getPromotionPiece() != null) piece.setPieceType( move.getPromotionPiece() );
         piece.moved();
@@ -123,10 +111,7 @@ public class ChessGame {
     }
     public boolean isInCheck(TeamColor teamColor, ChessBoard boardToTest) {
         Set<ChessPosition> kingPos = boardToTest.getcPiecesOfType(ChessPiece.PieceType.KING, teamColor).keySet();
-//        System.out.println(kingPos);
         Set<ChessPosition> strikeZone = zoneOfControl(other(teamColor), boardToTest);
-//        System.out.println(zoneToString(strikeZone, boardToTest));
-//        System.out.println("strikeZone: " + zoneToString(strikeZone, boardToTest));
         if (kingPos.isEmpty()) return false;
         if (strikeZone.containsAll(kingPos)) return true;
         else return false;
@@ -167,9 +152,7 @@ public class ChessGame {
     public boolean isInStalemate(TeamColor teamColor, ChessBoard boardToTest) {
         if (turn != teamColor) return false;
         if (isInCheckmate(teamColor, boardToTest)) return false;
-//        System.out.println(getAllMoves(teamColor, boardToTest));
         System.out.println(boardToTest);
-//        boardToTest.getcPieces(teamColor);
         HashSet<ChessMove> allValidMoves = new HashSet<>();
         for (Map.Entry<ChessPosition, ChessPiece> entry : boardToTest.getcPieces(teamColor).entrySet()) {
             System.out.println("entry: " + entry);
@@ -189,9 +172,6 @@ public class ChessGame {
     public void setBoard(ChessBoard board) {
         ChessGame.this.board = board;
     }
-//    public void resetTestBoard() {
-//        testBoard = new ChessBoard(board);
-//    }
 
     /**
      * Gets the current chessboard
@@ -234,7 +214,6 @@ public class ChessGame {
                 makeMoveUnchecked( new ChessMove(kingPos.rel(0, i), kingPos.rel(0, -dir)), boardToTest );
             }
         }
-        return;
     }
 
     private Optional<ChessMove> enPresantMove(ChessPosition pawnPos) {
@@ -270,9 +249,6 @@ public class ChessGame {
         return newBoard;
     }
 
-    private Set<ChessMove> getAllMoves (TeamColor team) {
-        return getAllMoves(team, board);
-    }
     private Set<ChessMove> getAllMoves (TeamColor team, ChessBoard testBoard) {
         HashSet<ChessMove> allMoves = new HashSet<>();
         Map<ChessPosition, ChessPiece> cpieces = testBoard.getcPieces(team);
@@ -282,9 +258,6 @@ public class ChessGame {
         return allMoves;
     }
 
-    private Set<ChessPosition> zoneOfControl(TeamColor team) {
-        return zoneOfControl(team, board);
-    }
     private Set<ChessPosition> zoneOfControl(TeamColor team, ChessBoard testBoard) {
         HashSet<ChessPosition> zone = HashSet.newHashSet(32);
         Map<ChessPosition, ChessPiece> cpieces =  testBoard.getcPieces(team);
@@ -296,6 +269,7 @@ public class ChessGame {
         }
         return zone;
     }
+
     private String zoneToString (Set<ChessPosition> zone, ChessBoard testBoard) {
         StringBuilder sb = new StringBuilder();
         sb.append("Zone{\n");

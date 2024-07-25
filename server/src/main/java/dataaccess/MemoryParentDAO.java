@@ -20,9 +20,13 @@ public class MemoryParentDAO<K, V extends model.Identifier<K>> implements DataAc
     }
 
     public void update(K key, V value) throws DataAccessException {
-//        if (key.equals(value.getId())) System.out.println("MemoryParentDAO update key is equal to value.getId()");
-        if ( !db.containsKey(key) ) throw new DataAccessException("Key: " + key + " isn't found in the database, unable to update it. ");
-        if ( db.containsKey(value.getId()) && !key.equals(value.getId()) ) throw new DataAccessException("Unable to update value: " + value + " to key: " + value.getId() + " because that key already exists. ");
+        if ( !db.containsKey(key) ) {
+            throw new DataAccessException("Key: " + key + " isn't found in the database, unable to update it. ");
+        }
+        if ( db.containsKey(value.getId()) && !key.equals(value.getId()) ) {
+            throw new DataAccessException("Unable to update value: " + value
+                    + " to key: " + value.getId() + " because that key already exists. ");
+        }
         remove(key);
         add(value);
 

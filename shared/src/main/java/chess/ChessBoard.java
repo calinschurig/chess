@@ -26,7 +26,6 @@ public class ChessBoard {
             else newBoard.addPiece(pos, new ChessPiece( another.board[i][j] ) );
         }}
         return newBoard;
-//        this.pieces = another.pieces;
     }
 
     /**
@@ -38,7 +37,6 @@ public class ChessBoard {
     public void addPiece(ChessPosition position, ChessPiece piece) {
         board[position.getRow()-1][position.getColumn()-1] = piece;
         if (piece != null) pieces.put(position, piece);
-        // throw new RuntimeException("Not implemented");
     }
     public ChessPiece removePiece(ChessPosition position) {
         ChessPiece piece = getPiece(position);
@@ -56,7 +54,6 @@ public class ChessBoard {
      */
     public ChessPiece getPiece(ChessPosition position) {
         return board[position.getRow()-1][position.getColumn()-1];
-        // throw new RuntimeException("Not implemented");
     }
     public ChessPiece getPieceAt(int row, int col) {
         return board[row-1][col-1];
@@ -71,9 +68,6 @@ public class ChessBoard {
         return getPiece(startPosition).getTeamColor();
     }
 
-    public Map<ChessPosition, ChessPiece> getPieces() {
-        return pieces;
-    }
     public Map<ChessPosition, ChessPiece> getcPieces(ChessGame.TeamColor team) {
         HashMap<ChessPosition, ChessPiece> cpieces = HashMap.newHashMap(16);
         for (Map.Entry<ChessPosition, ChessPiece> entry : pieces.entrySet()) {
@@ -81,12 +75,6 @@ public class ChessBoard {
                 cpieces.put(entry.getKey(), entry.getValue());
         }
         return cpieces;
-    }
-    public Map<ChessPosition, ChessPiece> getbPieces() { return getcPieces(ChessGame.TeamColor.BLACK); }
-    public Map<ChessPosition, ChessPiece> getwPieces() { return getcPieces(ChessGame.TeamColor.WHITE); }
-
-    public Map<ChessPosition, ChessPiece> getPiecesOfType(ChessPiece.PieceType type) {
-        return getcPiecesOfType(type, false, ChessGame.TeamColor.WHITE);
     }
     public Map<ChessPosition, ChessPiece> getcPiecesOfType(ChessPiece.PieceType type, ChessGame.TeamColor teamColor) {
         return getcPiecesOfType(type, true, teamColor);

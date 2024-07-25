@@ -149,7 +149,7 @@ public class ChessPiece {
                 // if (i == 0 && j == 0) break;
                 ChessPosition newPosition = new ChessPosition(row+i,col+j);
                 // System.out.println("i: " + i + "\tj: " + j + "\tisValid: " + isValidMove(board, myPosition, newPosition) + "\tpiece: " + board.getPiece(newPosition));
-                ChessMove.moveType moveType = getMoveType(board, myPosition, newPosition);
+                ChessMove.MoveType moveType = getMoveType(board, myPosition, newPosition);
                 switch (moveType) {
                     case EMPTY , CAPTURE -> {
                         ChessMove move = new ChessMove(myPosition, newPosition, null);
@@ -173,7 +173,7 @@ public class ChessPiece {
                 if (i == 0 && j == 0) continue;
                 for (int distance = 1; distance < 8; distance++) {
                     ChessPosition newPosition = new ChessPosition(row+(i*distance),col+(j*distance));
-                    ChessMove.moveType moveType = getMoveType(board, myPosition, newPosition);
+                    ChessMove.MoveType moveType = getMoveType(board, myPosition, newPosition);
                     boolean shouldBreak = false;
                     switch (moveType) {
                         case EMPTY -> {
@@ -214,7 +214,7 @@ public class ChessPiece {
             for (int j = -1; j <= 1; j+=2) {
                 for (int distance = 1; distance < 8; distance++) {
                     ChessPosition newPosition = new ChessPosition(row+((i+j)/2*distance),col+((i-j)/2*distance));
-                    ChessMove.moveType moveType = getMoveType(board, myPosition, newPosition);
+                    ChessMove.MoveType moveType = getMoveType(board, myPosition, newPosition);
                     boolean shouldBreak = false;
                     switch (moveType) {
                         case EMPTY -> {
@@ -256,7 +256,7 @@ public class ChessPiece {
                 if (i != j && i != -j) break;
                 for (int distance = 1; distance < 8; distance++) {
                     ChessPosition newPosition = new ChessPosition(row+(i*distance),col+(j*distance));
-                    ChessMove.moveType moveType = getMoveType(board, myPosition, newPosition);
+                    ChessMove.MoveType moveType = getMoveType(board, myPosition, newPosition);
                     boolean shouldBreak = false;
                     switch (moveType) {
                         case EMPTY -> {
@@ -348,7 +348,7 @@ public class ChessPiece {
                     }
                     if (row == defaultRow) {
                         newPosition = new ChessPosition(row + 2*direction, col);
-                        if (getMoveType(board, myPosition, newPosition) == ChessMove.moveType.EMPTY) {
+                        if (getMoveType(board, myPosition, newPosition) == ChessMove.MoveType.EMPTY) {
                             ChessMove move = new ChessMove(myPosition, newPosition, null);
                             possibleMoves.add(move);
                         }
@@ -379,15 +379,9 @@ public class ChessPiece {
         return possibleMoves;
     }
 
-    private ChessMove.moveType getMoveType (ChessBoard board, ChessPosition myPosition, ChessPosition newPosition) {
-        if ( newPosition.getRow() > 8 || newPosition.getRow() < 1 ) return ChessMove.moveType.INVALID;
-        if ( newPosition.getColumn() > 8 || newPosition.getColumn() < 1 ) return ChessMove.moveType.INVALID;
-        if (myPosition == newPosition) return ChessMove.moveType.INVALID;
-        if ( board.getPiece(newPosition) == null ) return ChessMove.moveType.EMPTY;
-
-        if (board.getPiece(myPosition) == null) System.out.println("error: getMoveType myposition piece is null: " + myPosition);
-        if ( board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor() ) return ChessMove.moveType.CAPTURE;
-        else return ChessMove.moveType.GUARD;
+    private ChessMove.MoveType getMoveType (ChessBoard board, ChessPosition myPosition, ChessPosition newPosition) {
+        ChessMove move = new ChessMove(myPosition, newPosition);
+        return move.getMoveType(board);
     }
 
     private Collection<ChessMove> promotionMoves(ChessPosition startPosition, ChessPosition endPosition) {

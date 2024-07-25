@@ -28,8 +28,7 @@ public class Server {
         Spark.staticFiles.location("web");
 
         Spark.before("/game", handler::authenticate);
-//        Spark.after();
-        // Register your endpoints and handle exceptions here.
+
         Spark.delete("/db", handler::clear);
         Spark.post("/user", handler::register);
         Spark.post("/session", handler::login);
@@ -41,22 +40,12 @@ public class Server {
         Spark.get("/user", (req, res) -> {
             throw new DataAccessException("Testing exception handling");
         });
-//        Spark.exception(DataAccessException.class, (e, req, res) -> {
-//            res.status(206);
-//            res.body("{}");
-//        });
-//        System.out.println("line 28 ran!");
 
         Spark.exception(InvalidAuthenticationException.class, handler::authenticationError);
         Spark.exception(DataAccessException.class, handler::serverError);
         Spark.exception(JsonSyntaxException.class, handler::badRequestError);
         Spark.exception(NullPointerException.class, handler::badRequestError);
         Spark.exception(BadRequestException.class, handler::badRequestError);
-
-//        Spark.exception(RuntimeException.class, handler::badRequestError);
-//        Spark.notFound((req, res) -> {
-//            return handler.badRequestError(new Exception("Not found"), req, res);
-//        });
 
         //This line initializes the server and can be removed once you have a functioning endpoint 
         Spark.init();
