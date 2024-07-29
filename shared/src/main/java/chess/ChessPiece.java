@@ -12,24 +12,15 @@ import java.util.function.Function;
 public class ChessPiece {
     ChessGame.TeamColor color;
     PieceType type;
-    boolean isNotMoved;
 
     public ChessPiece(ChessGame.TeamColor pieceColor, PieceType type) {
     ChessPiece.this.color = pieceColor;
     ChessPiece.this.type = type;
-    isNotMoved = true;
-    }
-
-    public ChessPiece(ChessGame.TeamColor pieceColor, PieceType type, boolean isNotMoved) {
-        ChessPiece.this.color = pieceColor;
-        ChessPiece.this.type = type;
-        ChessPiece.this.isNotMoved = isNotMoved;
     }
 
     public ChessPiece(ChessPiece another) {
         this.color = another.color;
         this.type = another.type;
-        this.isNotMoved = another.isNotMoved;
     }
 
 
@@ -77,12 +68,6 @@ public class ChessPiece {
         type = typeToSet;
     }
 
-
-    public boolean isNotMoved() {
-        return isNotMoved;
-    }
-    public boolean isMoved() {return !isNotMoved; }
-    public void moved() { isNotMoved = false; }
 
     /**
      * Calculates all the positions a chess piece can move to
@@ -379,9 +364,7 @@ public class ChessPiece {
         Set<ChessMove> moves = new HashSet<>();
         int[] possibleDirs = {-1, 0, 1};
         for (int[] dir : permutations(possibleDirs, possibleDirs)) {
-            System.out.println("dir: " + Arrays.toString(dir));
             if (selectDirection.check(dir[0], dir[1])) {
-                System.out.println("^^ passed");
                 moves.addAll( addMovesAtDistance(selectDistance, dir, board, myPosition, includeGuard));
             } else {
                 continue;
@@ -394,7 +377,6 @@ public class ChessPiece {
     Set<ChessMove> addMovesAtDistance(Function<Integer, Boolean> selectDistance, int[] direction,
                                       ChessBoard board, ChessPosition myPosition, boolean includeGuard) {
         Set<ChessMove> possibleMoves = new HashSet<>();
-        System.out.println("direction: " + Arrays.toString(direction));
         boolean shouldBreak = false;
         for (int dist = 1; dist < 8; dist++) {
             if (!selectDistance.apply(dist)) {
@@ -402,9 +384,8 @@ public class ChessPiece {
             }
             ChessMove move = new ChessMove(
                     myPosition,
-                    myPosition.rel(direction[0]*dist, direction[1]*dist)
+                    myPosition.relUnsafe(direction[0]*dist, direction[1]*dist)
             );
-            System.out.println("move: " + move);
             ChessMove.MoveType moveType = move.getMoveType(board);
             switch (moveType) {
                 case EMPTY -> {
