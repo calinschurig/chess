@@ -66,7 +66,6 @@ public class ChessGame {
             ChessBoard testBoard = ChessBoard.copy(board);
             makeMoveUnchecked(move, testBoard);
             if (isInCheck(color, testBoard)) {
-                System.out.println("removing due to is in check");
                 removes.add(move);
             }
         }
@@ -101,7 +100,6 @@ public class ChessGame {
         if (move.getPromotionPiece() != null)  {
             piece.setPieceType( move.getPromotionPiece() );
         }
-        piece.moved();
         boardToTest.removePiece(move.getStartPosition());
         boardToTest.addPiece(move.getEndPosition(), piece);
         if (boardToTest == board)  {
@@ -211,18 +209,19 @@ public class ChessGame {
         if (piece.getPieceType() != ChessPiece.PieceType.KING) {
             return cmoves;
         }
-        else if (piece.isMoved()) {
+        else if (isMoved(kingPos)) {
             return cmoves;
         }
         else if (isInCheck(piece.getTeamColor())) {
             return cmoves;
         }
         for (int dir = -1; dir <= 1; dir+=2) { for (int dist = 1; dist <=4; dist++) {
+            ChessPosition relPos = kingPos.rel(0, dir*dist);
             ChessPiece relPiece = boardToTest.getPiece(kingPos.rel(0, dir*dist));
             if (relPiece == null) {
                 continue;
             }
-            else if (relPiece.getPieceType() == ChessPiece.PieceType.ROOK && relPiece.isNotMoved()) {
+            else if (relPiece.getPieceType() == ChessPiece.PieceType.ROOK && !isMoved(relPos)) {
                 if (dist < 3) {
                     break;
                 }
@@ -242,7 +241,7 @@ public class ChessGame {
         for (int i = -2; i <= 2; i++) {
             int dir = (i < 0) ? -1 : 1;
             if ( boardToTest.getPiece(kingPos.rel(0, i)).getPieceType() == ChessPiece.PieceType.ROOK
-            && boardToTest.getPiece(kingPos.rel(0, i)).isNotMoved()) {
+            && !isMoved(kingPos.rel(0, i)) ) {
                 makeMoveUnchecked( new ChessMove(kingPos.rel(0, i), kingPos.rel(0, -dir)), boardToTest );
             }
         }
@@ -351,7 +350,14 @@ public class ChessGame {
         return sb.toString();
     }
 
-
+    private boolean isMoved(ChessPosition piecePosition) {
+        for (ChessMove move : moves) {
+            if (move.getEndPosition().equals(piecePosition)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     private TeamColor other(TeamColor team) {
         switch (team) {
