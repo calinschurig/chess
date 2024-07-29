@@ -38,6 +38,23 @@ public class ChessPosition {
     public ChessPosition rel(int relRow, int relCol) {
         int retRow = row + relRow;
         int retCol = col + relCol;
+        if (retRow < 1) {
+            retRow = 1;
+        }
+        if (retRow > 8) {
+            retRow = 8;
+        }
+        if (retCol < 1) {
+            retCol = 1;
+        }
+        if (retCol > 8) {
+            retRow = 8;
+        }
+        return new ChessPosition(retRow, retCol);
+    }
+    public ChessPosition relUnsafe(int relRow, int relCol) {
+        int retRow = row + relRow;
+        int retCol = col + relCol;
         return new ChessPosition(retRow, retCol);
     }
 
