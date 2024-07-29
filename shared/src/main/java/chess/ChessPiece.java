@@ -145,20 +145,21 @@ public class ChessPiece {
         Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                // if (i == 0 && j == 0) break;
-                ChessPosition newPosition = new ChessPosition(row+i,col+j);
-                // System.out.println("i: " + i + "\tj: " + j + "\tisValid: " + isValidMove(board, myPosition, newPosition) + "\tpiece: " + board.getPiece(newPosition));
-                ChessMove.MoveType moveType = getMoveType(board, myPosition, newPosition);
-                switch (moveType) {
-                    case EMPTY , CAPTURE -> {
-                        ChessMove move = new ChessMove(myPosition, newPosition, null);
-                        possibleMoves.add(move);
+        possibleMoves.addAll( addMoves(
+                (rowDir, colDir) -> {
+                    if ( rowDir == 1 || rowDir == -1 || colDir == 1 || colDir == -1 ) {
+                        return true;
+                    } else {
+                        return false;
                     }
-                }
-            }
-        }
+                },
+                (dist) -> {
+                    return dist == 1;
+                },
+                board,
+                myPosition,
+                includeGuard
+        ));
         return possibleMoves;
     }
 
@@ -169,38 +170,21 @@ public class ChessPiece {
         Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
-        for (int i = -1; i <= 1; i+=1) {
-            for (int j = -1; j <= 1; j+=1) {
-                if (i == 0 && j == 0) continue;
-                for (int distance = 1; distance < 8; distance++) {
-                    ChessPosition newPosition = new ChessPosition(row+(i*distance),col+(j*distance));
-                    ChessMove.MoveType moveType = getMoveType(board, myPosition, newPosition);
-                    boolean shouldBreak = false;
-                    switch (moveType) {
-                        case EMPTY -> {
-                            ChessMove move = new ChessMove(myPosition, newPosition, null);
-                            possibleMoves.add(move);
-                        }
-                        case CAPTURE -> {
-                            shouldBreak = true;
-                            ChessMove move = new ChessMove(myPosition, newPosition, null);
-                            possibleMoves.add(move);
-                        }
-                        case GUARD -> {
-                            shouldBreak = true;
-                            if (includeGuard) {
-                                ChessMove move = new ChessMove(myPosition, newPosition, null);
-                                possibleMoves.add(move);
-                            }
-                        }
-                        case null, default -> {
-                            shouldBreak = true;
-                        }
+        possibleMoves.addAll( addMoves(
+                (rowDir, colDir) -> {
+                    if ( rowDir == 1 || rowDir == -1 || colDir == 1 || colDir == -1 ) {
+                        return true;
+                    } else {
+                        return false;
                     }
-                    if (shouldBreak) break;
-                }
-            }
-        }
+                },
+                (dist) -> {
+                    return dist < 8;
+                },
+                board,
+                myPosition,
+                includeGuard
+        ));
         return possibleMoves;
     }
 
@@ -209,39 +193,21 @@ public class ChessPiece {
     }
     public Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition, boolean includeGuard) {
         Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
-        int row = myPosition.getRow();
-        int col = myPosition.getColumn();
-        for (int i = -1; i <= 1; i+=2) {
-            for (int j = -1; j <= 1; j+=2) {
-                for (int distance = 1; distance < 8; distance++) {
-                    ChessPosition newPosition = new ChessPosition(row+((i+j)/2*distance),col+((i-j)/2*distance));
-                    ChessMove.MoveType moveType = getMoveType(board, myPosition, newPosition);
-                    boolean shouldBreak = false;
-                    switch (moveType) {
-                        case EMPTY -> {
-                            ChessMove move = new ChessMove(myPosition, newPosition, null);
-                            possibleMoves.add(move);
-                        }
-                        case CAPTURE -> {
-                            shouldBreak = true;
-                            ChessMove move = new ChessMove(myPosition, newPosition, null);
-                            possibleMoves.add(move);
-                        }
-                        case GUARD -> {
-                            shouldBreak = true;
-                            if (includeGuard) {
-                                ChessMove move = new ChessMove(myPosition, newPosition, null);
-                                possibleMoves.add(move);
-                            }
-                        }
-                        case null, default -> {
-                            shouldBreak = true;
-                        }
+        possibleMoves.addAll( addMoves(
+                (rowDir, colDir) -> {
+                    if ( (rowDir == 0 && colDir != 0) || (colDir == 0 && rowDir != 0) ) {
+                        return true;
+                    } else {
+                        return false;
                     }
-                    if (shouldBreak) break;
-                }
-            }
-        }
+                },
+                (dist) -> {
+                    return dist < 8;
+                },
+                board,
+                myPosition,
+                includeGuard
+        ));
         return possibleMoves;
     }
 
@@ -249,41 +215,22 @@ public class ChessPiece {
         return bishopMoves(board, myPosition, false);
     }
     public Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition, boolean includeGuard) {
-        Collection<ChessMove> possibleMoves = new java.util.ArrayList<>(List.of());
-        int row = myPosition.getRow();
-        int col = myPosition.getColumn();
-        for (int i = -1; i <= 1; i+=2) {
-            for (int j = -1; j <= 1; j+=2) {
-                if (i != j && i != -j) break;
-                for (int distance = 1; distance < 8; distance++) {
-                    ChessPosition newPosition = new ChessPosition(row+(i*distance),col+(j*distance));
-                    ChessMove.MoveType moveType = getMoveType(board, myPosition, newPosition);
-                    boolean shouldBreak = false;
-                    switch (moveType) {
-                        case EMPTY -> {
-                            ChessMove move = new ChessMove(myPosition, newPosition, null);
-                            possibleMoves.add(move);
-                        }
-                        case CAPTURE -> {
-                            shouldBreak = true;
-                            ChessMove move = new ChessMove(myPosition, newPosition, null);
-                            possibleMoves.add(move);
-                        }
-                        case GUARD -> {
-                            shouldBreak = true;
-                            if (includeGuard) {
-                                ChessMove move = new ChessMove(myPosition, newPosition, null);
-                                possibleMoves.add(move);
-                            }
-                        }
-                        case null, default -> {
-                            shouldBreak = true;
-                        }
+        Set<ChessMove> possibleMoves = new java.util.HashSet<>();
+        possibleMoves.addAll( addMoves(
+                (rowDir, colDir) -> {
+                    if ( (rowDir == 1 || rowDir == -1) && (colDir == 1 || colDir == -1) ) {
+                        return true;
+                    } else {
+                        return false;
                     }
-                    if (shouldBreak) break;
-                }
-            }
-        }
+                },
+                (dist) -> {
+                    return dist < 8;
+                },
+                board,
+                myPosition,
+                includeGuard
+        ));
         return possibleMoves;
     }
     public Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition) {
@@ -428,11 +375,15 @@ public class ChessPiece {
         boolean check(int i, int j);
     }
     Set<ChessMove> addMoves(BinaryIntToBoolean selectDirection, Function<Integer, Boolean> selectDistance,
-                            ChessBoard board, ChessPosition myPosition) {
+                            ChessBoard board, ChessPosition myPosition, boolean includeGuard) {
         Set<ChessMove> moves = new HashSet<>();
-        int[] dir = {-1, 0, 1};
-        for (int[] pair : permutations(dir, dir)) {
-            if (!selectDirection.check(pair[0], pair[1])) {
+        int[] possibleDirs = {-1, 0, 1};
+        for (int[] dir : permutations(possibleDirs, possibleDirs)) {
+            System.out.println("dir: " + Arrays.toString(dir));
+            if (selectDirection.check(dir[0], dir[1])) {
+                System.out.println("^^ passed");
+                moves.addAll( addMovesAtDistance(selectDistance, dir, board, myPosition, includeGuard));
+            } else {
                 continue;
             }
 
@@ -443,6 +394,7 @@ public class ChessPiece {
     Set<ChessMove> addMovesAtDistance(Function<Integer, Boolean> selectDistance, int[] direction,
                                       ChessBoard board, ChessPosition myPosition, boolean includeGuard) {
         Set<ChessMove> possibleMoves = new HashSet<>();
+        System.out.println("direction: " + Arrays.toString(direction));
         boolean shouldBreak = false;
         for (int dist = 1; dist < 8; dist++) {
             if (!selectDistance.apply(dist)) {
@@ -452,6 +404,7 @@ public class ChessPiece {
                     myPosition,
                     myPosition.rel(direction[0]*dist, direction[1]*dist)
             );
+            System.out.println("move: " + move);
             ChessMove.MoveType moveType = move.getMoveType(board);
             switch (moveType) {
                 case EMPTY -> {
