@@ -73,10 +73,10 @@ public class ChessMove {
     public MoveType getMoveType (ChessBoard board) {
         ChessPosition myPosition = getStartPosition();
         ChessPosition newPosition = getEndPosition();
-        if ( newPosition.getRow() > 8 || end.getRow() < 1 ) {
+        if ( end.getRow() > 8 || end.getRow() < 1  || start.getRow() > 8 || start.getRow() < 1) {
             return MoveType.INVALID;
         }
-        if ( newPosition.getColumn() > 8 || end.getColumn() < 1 ) {
+        if ( end.getColumn() > 8 || end.getColumn() < 1 || start.getColumn() > 8 || start.getColumn() < 1) {
             return MoveType.INVALID;
         }
         if ( board.getPiece(end) == null ) {
@@ -84,12 +84,12 @@ public class ChessMove {
         }
 
         if (board.getPiece(start) == null) {
-            System.out.println("error: getMoveType myposition piece is null: " + myPosition);
+            System.out.println("error: getMoveType start piece is null: " + start);
         }
-        if ( start == end ) {
+        if ( start.equals(end) ) {
             return MoveType.INVALID;
         }
-        if ( board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor() ) {
+        if ( board.getPiece(end).getTeamColor() != board.getPiece(start).getTeamColor() ) {
             return MoveType.CAPTURE;
         } else {
             return MoveType.GUARD;
