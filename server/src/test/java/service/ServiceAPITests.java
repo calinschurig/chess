@@ -21,11 +21,14 @@ public class ServiceAPITests {
 
     @BeforeAll
     public static void init() {
-        userDAO = new MemoryUserDAO();
+        userDAO = new SQLUserDAO(new UserData("","",""));
         testUser = new UserData("username", "password", "email@example.com");
-        gameDAO = new MemoryGameDAO();
-        authDAO = new MemoryAuthDAO();
+        gameDAO = new SQLGameDAO(new GameData(0, "", "", "", new ChessGame()));
+        authDAO = new SQLAuthDAO(new AuthData("", ""));
         testGameName = "test game";
+        userDAO.clear();
+        gameDAO.clear();
+        authDAO.clear();
     }
 
 
