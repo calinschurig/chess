@@ -36,7 +36,7 @@ public class SQLParentDAO <K, V extends Identifier<K>> implements DataAccessInte
         }
     }
 
-    void generateJSONTable(V val) {
+    private void generateJSONTable(V val) {
         try  {
             DatabaseManager.createDatabase();
         } catch (DataAccessException e) {
@@ -73,7 +73,7 @@ public class SQLParentDAO <K, V extends Identifier<K>> implements DataAccessInte
         }
     }
 
-    void generateVerboseTable(V val) throws DataAccessException, SQLException {
+    private void generateVerboseTable(V val) throws DataAccessException, SQLException {
         val.getIdField();
         try  {
             DatabaseManager.createDatabase();
@@ -189,7 +189,7 @@ public class SQLParentDAO <K, V extends Identifier<K>> implements DataAccessInte
         if ( get(key) == null ) {
             throw new DataAccessException("Key: " + key + " isn't found in the database, unable to update it. ");
         }
-        if ( get(key) != null && !key.equals(value.getId()) ) {
+        if ( get(value.getId()) != null && !key.equals(value.getId()) ) {
             throw new DataAccessException("Unable to update value: " + value
                     + " to key: " + value.getId() + " because that key already exists. ");
         }
@@ -208,8 +208,8 @@ public class SQLParentDAO <K, V extends Identifier<K>> implements DataAccessInte
                     preparedStatement.setString(1, (String) key);
                 } else if (key.getClass() == int.class) {
                     preparedStatement.setInt(1, (int) key);
-                } else {
-                    return;
+                } else if (key.getClass() == Integer.class) {
+                    preparedStatement.setInt(1, (int) key);
                 }
                 preparedStatement.executeUpdate();
             }
