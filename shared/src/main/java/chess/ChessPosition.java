@@ -16,6 +16,10 @@ public class ChessPosition {
     ChessPosition.this.row = row;
     ChessPosition.this.col = col;
     }
+    public ChessPosition(String input) {
+        row = Integer.parseInt(input.substring(0, 2));
+        col = Integer.parseInt(input.substring(2, 4));
+    }
 
     /**
      * @return which row this position is in
@@ -77,11 +81,10 @@ public class ChessPosition {
         return Objects.hash(row, col);
     }
 
-    @Override
     public String toString() {
         return "(" +
                 row +
                 "," + col +
-                ')';
+                ")";
     }
 }

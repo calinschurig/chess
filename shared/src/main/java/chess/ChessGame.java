@@ -89,11 +89,19 @@ public class ChessGame {
         if (boardToTest == board && turn != boardToTest.getPieceColor(move.getStartPosition())) {
             throw new InvalidMoveException("Out of turn move! ");
         }
-
         if (!validMoves(move.getStartPosition()).contains(move)) {
             throw new InvalidMoveException("Invalid move: " + move);
         }
-        makeMoveUnchecked(move, boardToTest);
+        if (isCastle(move)) {
+            System.out.println("Made castle move!");
+            makeCastleMove(move, boardToTest);
+        } else if (isEnPassant(move)) {
+            makeEnPresantMove(move, boardToTest);
+        }
+        else {
+            makeMoveUnchecked(move, boardToTest);
+
+        }
     }
     private void makeMoveUnchecked(ChessMove move, ChessBoard boardToTest)  {
         ChessPiece piece = new ChessPiece(boardToTest.getPiece(move.getStartPosition()));
@@ -201,21 +209,32 @@ public class ChessGame {
     }
 
     private Collection<ChessMove> castleMoves(ChessPosition kingPos) {
-        return castleMoves(kingPos, board);
+        HashSet<ChessMove> moves = (HashSet<ChessMove>) castleMoves(kingPos, board);
+        System.out.println("castleMoves: " + moves);
+        return moves;
     }
-    private Collection<ChessMove> castleMoves(ChessPosition kingPos, ChessBoard boardToTest) {
-        ArrayList<ChessMove> cmoves = new ArrayList<>();
+    private Set<ChessMove> castleMoves(ChessPosition kingPos, ChessBoard boardToTest) {
+        HashSet<ChessMove> possibleCastles = new HashSet<>();
         ChessPiece piece = boardToTest.getPiece(kingPos);
         if (piece.getPieceType() != ChessPiece.PieceType.KING) {
-            return cmoves;
+            System.out.println("castleMoves is not based on a King!");
+            return possibleCastles;
         }
         else if (isMoved(kingPos)) {
-            return cmoves;
+            System.out.println("castleMoves detected the king has moved!");
+            System.out.println(moves);
+            return possibleCastles;
         }
         else if (isInCheck(piece.getTeamColor())) {
-            return cmoves;
+            System.out.println("castleMoves detected the king is in check!");
+            return possibleCastles;
         }
         for (int dir = -1; dir <= 1; dir+=2) { for (int dist = 1; dist <=4; dist++) {
+            if (dist*dir + kingPos.getColumn() > 8) {
+                break;
+            } else if (dist*dir + kingPos.getColumn() < 1) {
+                break;
+            }
             ChessPosition relPos = kingPos.rel(0, dir*dist);
             ChessPiece relPiece = boardToTest.getPiece(kingPos.rel(0, dir*dist));
             if (relPiece == null) {
@@ -225,12 +244,12 @@ public class ChessGame {
                 if (dist < 3) {
                     break;
                 }
-                cmoves.add(new ChessMove(
+                possibleCastles.add(new ChessMove(
                         kingPos, kingPos.rel(0, dir*2), null, true, false)
                 );
             }
         }}
-        return cmoves;
+        return possibleCastles;
     }
     private void makeCastleMove(ChessMove move, ChessBoard boardToTest) throws InvalidMoveException {
         if ( !castleMoves(move.getStartPosition(), boardToTest).contains(move) ) {
@@ -353,10 +372,32 @@ public class ChessGame {
     private boolean isMoved(ChessPosition piecePosition) {
         for (ChessMove move : moves) {
             if (move.getEndPosition().equals(piecePosition)) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
+    }
+
+    private boolean isCastle(ChessMove move) {
+        return isCastle(move, board);
+    }
+    private boolean isCastle(ChessMove move, ChessBoard boardToTest) {
+        if (true) {
+            return false;
+        }
+        if (!(boardToTest.getPiece(move.getStartPosition()).getPieceType() == ChessPiece.PieceType.KING)) {
+            return false;
+        } else if (!isMoved(move.getStartPosition())) {
+            return false;
+        } else if (Math.abs(move.getStartPosition().getColumn() - move.getEndPosition().getColumn()) != 2) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean isEnPassant(ChessMove move) {
+        return false;
     }
 
     private TeamColor other(TeamColor team) {

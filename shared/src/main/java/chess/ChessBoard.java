@@ -10,22 +10,22 @@ import java.util.*;
  */
 public class ChessBoard {
 
-    ChessPiece[][] board;
-    HashMap<ChessPosition, ChessPiece> pieces;
+    ChessPiece[][] boardArray;
+    HashMap<ChessPosition, ChessPiece> piecesMap;
 
     public ChessBoard() {
-        board = new ChessPiece[8][8];
-        pieces = HashMap.newHashMap(50);
+        boardArray = new ChessPiece[8][8];
+        piecesMap = HashMap.newHashMap(50);
     }
 
     public static ChessBoard copy(ChessBoard another) {
         ChessBoard newBoard = new ChessBoard();
         for (int i = 0; i < 8; i++) { for (int j = 0; j < 8; j++) {
             ChessPosition pos = new ChessPosition(i+1, j+1);
-            if (another.board[i][j] == null) {
-                newBoard.board[i][j] = null;
+            if (another.boardArray[i][j] == null) {
+                newBoard.boardArray[i][j] = null;
             }
-            else newBoard.addPiece(pos, new ChessPiece( another.board[i][j] ) );
+            else newBoard.addPiece(pos, new ChessPiece( another.boardArray[i][j] ) );
         }}
         return newBoard;
     }
@@ -37,15 +37,15 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        board[position.getRow()-1][position.getColumn()-1] = piece;
+        boardArray[position.getRow()-1][position.getColumn()-1] = piece;
         if (piece != null) {
-            pieces.put(position, piece);
+            piecesMap.put(position, piece);
         }
     }
     public ChessPiece removePiece(ChessPosition position) {
         ChessPiece piece = getPiece(position);
-        board[position.getRow()-1][position.getColumn()-1] = null;
-        pieces.remove(position);
+        boardArray[position.getRow()-1][position.getColumn()-1] = null;
+        piecesMap.remove(position);
         return piece;
     }
 
@@ -57,10 +57,10 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        return board[position.getRow()-1][position.getColumn()-1];
+        return boardArray[position.getRow()-1][position.getColumn()-1];
     }
     public ChessPiece getPieceAt(int row, int col) {
-        return board[row-1][col-1];
+        return boardArray[row-1][col-1];
     }
 
     public Collection<ChessMove> getPieceMoves(ChessPosition startPosition) {
@@ -76,7 +76,7 @@ public class ChessBoard {
 
     public Map<ChessPosition, ChessPiece> getcPieces(ChessGame.TeamColor team) {
         HashMap<ChessPosition, ChessPiece> cpieces = HashMap.newHashMap(16);
-        for (Map.Entry<ChessPosition, ChessPiece> entry : pieces.entrySet()) {
+        for (Map.Entry<ChessPosition, ChessPiece> entry : piecesMap.entrySet()) {
             if (entry.getValue().getTeamColor() == team) {
                 cpieces.put(entry.getKey(), entry.getValue());
             }
@@ -88,7 +88,7 @@ public class ChessBoard {
     }
     private Map<ChessPosition, ChessPiece> getcPiecesOfType(ChessPiece.PieceType type, boolean isByTeam, ChessGame.TeamColor teamColor) {
         HashMap<ChessPosition, ChessPiece> tcpieces = HashMap.newHashMap(16);
-        Map<ChessPosition, ChessPiece> cpieces = (isByTeam) ? getcPieces(teamColor) : pieces;
+        Map<ChessPosition, ChessPiece> cpieces = (isByTeam) ? getcPieces(teamColor) : piecesMap;
         for (Map.Entry<ChessPosition, ChessPiece> entry : cpieces.entrySet()) {
             if (entry.getValue().getPieceType() == type) {
                 tcpieces.put(entry.getKey(), entry.getValue());
@@ -104,14 +104,14 @@ public class ChessBoard {
     public void resetBoard() {
         for (int i = 0; i < 8; i++) {
             addPiece( new ChessPosition(2, i+1), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN) );
-            board[2][i] = null;
-            board[3][i] = null;
-            board[4][i] = null;
-            board[5][i] = null;
+            boardArray[2][i] = null;
+            boardArray[3][i] = null;
+            boardArray[4][i] = null;
+            boardArray[5][i] = null;
             addPiece( new ChessPosition(7, i+1), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN) );
         }
-        resetBackRow(board, ChessGame.TeamColor.WHITE, 1);
-        resetBackRow(board, ChessGame.TeamColor.BLACK, 8);
+        resetBackRow(boardArray, ChessGame.TeamColor.WHITE, 1);
+        resetBackRow(boardArray, ChessGame.TeamColor.BLACK, 8);
     }
 
     private void resetBackRow(ChessPiece[][] board, ChessGame.TeamColor color, int row) {
@@ -134,20 +134,20 @@ public class ChessBoard {
             return false;
         }
         ChessBoard that = (ChessBoard) o;
-        return Objects.deepEquals(board, that.board);
+        return Objects.deepEquals(boardArray, that.boardArray);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.deepHashCode(board);
+        return Arrays.deepHashCode(boardArray);
     }
 
     @Override
     public String toString() {
         StringBuilder returnString = new StringBuilder("ChessBoard{ \n");
         for (int i = 0; i < 8; i++) { for (int j = 0; j < 8; j++) {
-                if ( board[i][j] != null ) {
-                    returnString.append("|").append(board[i][j].shortToString());
+                if ( boardArray[i][j] != null ) {
+                    returnString.append("|").append(boardArray[i][j].shortToString());
                 } else {
                     returnString.append("|  ");
                 }
