@@ -1,13 +1,14 @@
 package server;
 
+import chess.ChessGame;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import dataaccess.DataAccessException;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
-import dataaccess.MemoryUserDAO;
+import dataaccess.*;
 import handler.BadRequestException;
 import handler.InvalidAuthenticationException;
+import model.AuthData;
+import model.GameData;
+import model.UserData;
 import spark.*;
 import handler.Handler;
 
@@ -16,7 +17,11 @@ import javax.xml.crypto.Data;
 public class Server {
     private final Handler handler;
     public Server() {
-        this.handler = new Handler(new MemoryUserDAO(), new MemoryGameDAO(), new MemoryAuthDAO());
+        this.handler = new Handler(
+                new SQLUserDAO(new UserData("","","")),
+                new SQLGameDAO(new GameData(0, "", "", "", new ChessGame())),
+                new SQLAuthDAO(new AuthData("", ""))
+        );
     }
     public Server(Handler handler) {
         this.handler = handler;
