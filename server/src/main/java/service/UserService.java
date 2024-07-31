@@ -3,8 +3,10 @@ package service;
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import dataaccess.UserDAO;
+import handler.BadRequestException;
 import model.AuthData;
 import model.UserData;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
@@ -18,10 +20,13 @@ public class UserService {
         }
         else if ( user.username().isEmpty() ) {
             throw new DataAccessException("Cannot register user because username is blank. ");
+        } else if (null == user.password() || user.password().isBlank()) {
+            throw new BadRequestException("Cannot register user because password is blank. ");
+        } else {
+            UserData hashedUser = new UserData(user.username(), BCrypt.hashpw(user.password(), BCrypt.gensalt()), user.email());
+            userDAO.add(hashedUser);
         }
-        else {
-            userDAO.add(user);
-        }
+        ;
         return login(user.username(), user.password(), userDAO, authDAO);
     }
 
@@ -30,7 +35,7 @@ public class UserService {
         if ( null == userDAO.get(username) ) {
             throw new DataAccessException("Error logging in; no user exists with username: " + username);
         }
-        if ( !password.equals(userDAO.get(username).password()) ) {
+        if ( !BCrypt.checkpw(password, userDAO.get(username).password()) ) {
             throw new DataAccessException("Incorrect password. ");
         }
         String possibleAuthToken = UUID.randomUUID().toString();
