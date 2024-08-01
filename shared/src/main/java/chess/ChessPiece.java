@@ -291,10 +291,10 @@ public class ChessPiece {
                     }
                     if (row == defaultRow) {
                         newPosition = new ChessPosition(row + 2*direction, col);
-                        if (getMoveType(board, myPosition, newPosition) == ChessMove.MoveType.EMPTY) {
-                            ChessMove move = new ChessMove(myPosition, newPosition, null);
-                            possibleMoves.add(move);
-                        }
+                    }
+                    if (row == defaultRow && getMoveType(board, myPosition, newPosition) == ChessMove.MoveType.EMPTY) {
+                        ChessMove move = new ChessMove(myPosition, newPosition, null);
+                        possibleMoves.add(move);
                     }
                 }
                 case CAPTURE -> {
@@ -312,13 +312,12 @@ public class ChessPiece {
                     if (i == 0) {
                         break;
                     }
-                    if (includeGuard) {
-                        if (row+direction == 1 || row+direction == 8) {
-                            possibleMoves.addAll(promotionMoves(myPosition, newPosition));
-                        } else {
-                            ChessMove move = new ChessMove(myPosition, newPosition, null);
-                            possibleMoves.add(move);
-                        }
+                    if (includeGuard && (row+direction == 1 || row+direction == 8)) {
+
+                        possibleMoves.addAll(promotionMoves(myPosition, newPosition));
+                    } else if (includeGuard && !(row+direction == 2 || row+direction == 8)) {
+                        ChessMove move = new ChessMove(myPosition, newPosition, null);
+                        possibleMoves.add(move);
                     }
                 }
             }

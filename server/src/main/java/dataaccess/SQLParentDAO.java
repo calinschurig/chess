@@ -123,13 +123,8 @@ public class SQLParentDAO <K, V extends Identifier<K>> implements DataAccessInte
                     preparedStatement.setInt(1, (int) id);
                 }
                 try (var rs = preparedStatement.executeQuery()) {
-//                    System.out.println("preparedStatement: " + preparedStatement.toString());
                     if (rs.next()) {
-                        try {
-                            var data = gson.fromJson(rs.getString("json"), (Class<V>) exVal.getClass());
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
+
                         return gson.fromJson(rs.getString("json"), (Class<V>) exVal.getClass());
                     } else {
                         return null;
