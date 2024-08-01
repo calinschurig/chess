@@ -115,28 +115,26 @@ public class SQLParentDAO <K, V extends Identifier<K>> implements DataAccessInte
             StringBuilder sb = new StringBuilder();
             sb.append("SELECT json FROM ").append(tableName)
                     .append(" WHERE ").append(idName).append("=?;");
+
             try (var preparedStatement = conn.prepareStatement(sb.toString())) {
                 if (id.getClass() == String.class) {
                     preparedStatement.setString(1, (String) id);
                 }  else if (id.getClass() == Integer.class) {
                     preparedStatement.setInt(1, (int) id);
                 }
-                ResultSet rs;
-                try (ResultSet temp = preparedStatement.executeQuery()) {
-                    rs = temp;
-                }
-                if (rs.next()) {
-                    try {
-                        var data = gson.fromJson(rs.getString("json"), (Class<V>) exVal.getClass());
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
+                try (var rs = preparedStatement.executeQuery()) {
+//                    System.out.println("preparedStatement: " + preparedStatement.toString());
+                    if (rs.next()) {
+                        try {
+                            var data = gson.fromJson(rs.getString("json"), (Class<V>) exVal.getClass());
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                        return gson.fromJson(rs.getString("json"), (Class<V>) exVal.getClass());
+                    } else {
+                        return null;
                     }
-                    return gson.fromJson(rs.getString("json"), (Class<V>) exVal.getClass());
-                } else {
-                    return null;
                 }
-
-
             }
         } catch (Exception e) {
             return null;
