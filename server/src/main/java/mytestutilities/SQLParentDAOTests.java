@@ -1,4 +1,4 @@
-package testutilities;
+package mytestutilities;
 
 import dataaccess.DataAccessException;
 import dataaccess.MemoryParentDAO;
@@ -92,6 +92,8 @@ public class SQLParentDAOTests<K, V extends Identifier<K>> {
         Assertions.assertThrows(DataAccessException.class, () -> sqlDAO.update(differentData.getId(), data));
         Assertions.assertThrows(DataAccessException.class, () -> memoryDAO.update(bogusData.getId(), differentData));
         Assertions.assertThrows(DataAccessException.class, () -> memoryDAO.update(bogusData.getId(), differentData));
+
+
         Assertions.assertArrayEquals(memoryDAO.getAll().toArray(), sqlDAO.getAll().toArray());
     }
 

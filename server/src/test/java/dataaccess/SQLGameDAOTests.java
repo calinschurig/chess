@@ -2,7 +2,7 @@ package dataaccess;
 
 import chess.ChessGame;
 import model.GameData;
-import testutilities.SQLParentDAOTests;
+import mytestutilities.SQLParentDAOTests;
 
 
 public class SQLGameDAOTests extends SQLParentDAOTests<Integer, GameData> {

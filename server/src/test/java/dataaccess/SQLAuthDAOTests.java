@@ -1,7 +1,7 @@
 package dataaccess;
 
 import model.AuthData;
-import testutilities.SQLParentDAOTests;
+import mytestutilities.SQLParentDAOTests;
 
 public class SQLAuthDAOTests extends SQLParentDAOTests<String, AuthData> {
     static {
