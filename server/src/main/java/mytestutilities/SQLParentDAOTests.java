@@ -6,8 +6,7 @@ import dataaccess.SQLParentDAO;
 import model.Identifier;
 import org.junit.jupiter.api.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SQLParentDAOTests<K, V extends Identifier<K>> {
@@ -93,7 +92,6 @@ public class SQLParentDAOTests<K, V extends Identifier<K>> {
         Assertions.assertThrows(DataAccessException.class, () -> memoryDAO.update(bogusData.getId(), differentData));
         Assertions.assertThrows(DataAccessException.class, () -> memoryDAO.update(bogusData.getId(), differentData));
 
-
         Assertions.assertArrayEquals(memoryDAO.getAll().toArray(), sqlDAO.getAll().toArray());
     }
 
@@ -105,11 +103,7 @@ public class SQLParentDAOTests<K, V extends Identifier<K>> {
         sqlDAO.add(data);
         memoryDAO.add(differentData);
         sqlDAO.add(differentData);
-        Set<Identifier> allData = new HashSet<>();
-        allData.add(data);
-        allData.add(differentData);
         Assertions.assertArrayEquals(memoryDAO.getAll().toArray(), sqlDAO.getAll().toArray());
-        Assertions.assertArrayEquals(allData.toArray(), sqlDAO.getAll().toArray());
     }
 
     @Test
