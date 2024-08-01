@@ -144,7 +144,9 @@ public class ServiceAPITests {
     @Order(14)
     @DisplayName("Already taken team join game")
     public void alreadyTakenJoinGame() throws DataAccessException {
-        Assertions.assertThrows(DataAccessException.class, () -> GameService.joinGame(ChessGame.TeamColor.WHITE, testGameID, testUser.username(), gameDAO));
+        Assertions.assertThrows(DataAccessException.class,
+                () -> GameService.joinGame(ChessGame.TeamColor.WHITE, testGameID, testUser.username(), gameDAO)
+        );
     }
 
 

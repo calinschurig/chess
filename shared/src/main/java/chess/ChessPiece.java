@@ -26,8 +26,12 @@ public class ChessPiece {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ChessPiece that = (ChessPiece) o;
         return color == that.color && type == that.type;
     }
@@ -107,12 +111,16 @@ public class ChessPiece {
     }
 
     public Collection<ChessMove> myZoneOfControl(ChessBoard board, ChessPosition myPosition) {
-        if (type != PieceType.PAWN) return pieceMoves(board, myPosition, true);
+        if (type != PieceType.PAWN) {
+            return pieceMoves(board, myPosition, true);
+        }
         HashSet<ChessMove> possibleMoves = new HashSet<>();
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
         int direction = 1;
-        if (board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.BLACK) direction = -1;
+        if (board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {
+            direction = -1;
+        }
         for (int i = -1; i <= 1; i+=2) {
             ChessPosition newPosition = new ChessPosition(row+direction, col+i);
             switch (getMoveType(board, myPosition, newPosition)) {
@@ -272,7 +280,9 @@ public class ChessPiece {
             ChessPosition newPosition = new ChessPosition(row+direction, col+i);
             switch (getMoveType(board, myPosition, newPosition)) {
                 case EMPTY -> {
-                    if (i != 0) break;
+                    if (i != 0) {
+                        break;
+                    }
                     if (row+direction == 1 || row+direction == 8) {
                         possibleMoves.addAll(promotionMoves(myPosition, newPosition));
                     } else {
@@ -288,7 +298,9 @@ public class ChessPiece {
                     }
                 }
                 case CAPTURE -> {
-                    if (i == 0) break;
+                    if (i == 0) {
+                        break;
+                    }
                     if (row+direction == 1 || row+direction == 8) {
                         possibleMoves.addAll(promotionMoves(myPosition, newPosition));
                     } else {
@@ -297,7 +309,9 @@ public class ChessPiece {
                     }
                 }
                 case GUARD -> {
-                    if (i == 0) break;
+                    if (i == 0) {
+                        break;
+                    }
                     if (includeGuard) {
                         if (row+direction == 1 || row+direction == 8) {
                             possibleMoves.addAll(promotionMoves(myPosition, newPosition));
@@ -342,8 +356,12 @@ public class ChessPiece {
 
     public String shortToString() {
         String toReturn;
-        if (color == ChessGame.TeamColor.WHITE) toReturn = "w";
-        else toReturn = "b";
+        if (color == ChessGame.TeamColor.WHITE) {
+            toReturn = "w";
+        }
+        else  {
+            toReturn = "b";
+        }
         switch (type) {
             case KING -> toReturn += "K";
             case QUEEN -> toReturn += "Q";

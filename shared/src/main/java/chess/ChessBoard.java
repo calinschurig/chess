@@ -25,7 +25,9 @@ public class ChessBoard {
             if (another.boardArray[i][j] == null) {
                 newBoard.boardArray[i][j] = null;
             }
-            else newBoard.addPiece(pos, new ChessPiece( another.boardArray[i][j] ) );
+            else {
+                newBoard.addPiece(pos, new ChessPiece( another.boardArray[i][j] ) );
+            }
         }}
         return newBoard;
     }
