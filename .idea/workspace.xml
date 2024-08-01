@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="77000de6-8a97-475d-b725-f7d6cae74905" name="Changes" comment="Trying to make the github repo be buildable with maven.">
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/testutilities/SQLParentDAOTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/mytestutilities/SQLParentDAOTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/test/java/dataaccess/SQLAuthDAOTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/test/java/dataaccess/SQLAuthDAOTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/test/java/dataaccess/SQLGameDAOTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/test/java/dataaccess/SQLGameDAOTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/test/java/dataaccess/SQLUserDAOTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/test/java/dataaccess/SQLUserDAOTests.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JavaAutoRunManager">
+    <enabled-run-configurations>
+      <run-configuration type="JUnit" name="ServiceAPITests" />
+    </enabled-run-configurations>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="false" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2jiu4nPG7ZDoUQ2HQIbwoRiCNT7" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Application.Main.executor": "Run",
+    "JUnit.All in shared.executor": "Run",
+    "JUnit.BishopMoveTests.bishopBlocked.executor": "Run",
+    "JUnit.BishopMoveTests.executor": "Run",
+    "JUnit.CastlingTests.executor": "Run",
+    "JUnit.DatabaseTests.executor": "Run",
+    "JUnit.KingMoveTests.executor": "Run",
+    "JUnit.QueenMoveTests.executor": "Run",
+    "JUnit.RookMoveTests.executor": "Run",
+    "JUnit.SQLAuthDAOTests.executor": "Run",
+    "JUnit.SQLGameDAOTests.executor": "Run",
+    "JUnit.SQLGameDAOTests.validAdd.executor": "Run",
+    "JUnit.SQLGameDAOTests.validGet.executor": "Run",
+    "JUnit.SQLGameDAOTests.validUpdate (1).executor": "Run",
+    "JUnit.SQLGameDAOTests.validUpdate.executor": "Run",
+    "JUnit.SQLParentDAOTests.clear.executor": "Run",
+    "JUnit.SQLParentDAOTests.emptyGetAll.executor": "Run",
+    "JUnit.SQLUserDAOTests.executor": "Run",
+    "JUnit.ServiceAPITests.executor": "Run",
+    "JUnit.StandardAPITests.executor": "Run",
+    "JUnit.dataaccess in server.executor": "Run",
+    "JUnit.java in server.executor": "Run",
+    "JUnit.piece in shared.executor": "Run",
+    "Maven.chess [compile].executor": "Run",
+    "Maven.chess [test].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Calin/Documents/cs240/chess",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.46781608",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.archetype.catalogs",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RdControllerToolWindowsLayoutState" isNewUi="true">
+    <layout>
+      <window_info id="Bookmarks" show_stripe_button="false" side_tool="true" />
+      <window_info id="Merge Requests" show_stripe_button="false" />
+      <window_info id="Commit_Guest" show_stripe_button="false" />
+      <window_info id="Pull Requests" show_stripe_button="false" />
+      <window_info id="Learn" show_stripe_button="false" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.35178572" />
+      <window_info id="Commit" order="1" weight="0.18391928" />
+      <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
+      <window_info anchor="bottom" id="TypeScript" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Profiler" show_stripe_button="false" />
+      <window_info anchor="bottom" id="TODO" show_stripe_button="false" />
+      <window_info anchor="bottom" id="File Transfer" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="0" />
+      <window_info anchor="bottom" id="Problems" order="1" />
+      <window_info anchor="bottom" id="Problems View" order="2" weight="0.27123785" />
+      <window_info anchor="bottom" id="Terminal" order="3" />
+      <window_info anchor="bottom" id="Debug" order="4" weight="0.3294903" />
+      <window_info active="true" anchor="bottom" id="Run" order="5" visible="true" weight="0.35297692" />
+      <window_info anchor="bottom" id="Build" order="6" weight="0.3469016" />
+      <window_info anchor="bottom" id="Services" order="6" />
+      <window_info anchor="right" id="Endpoints" show_stripe_button="false" />
+      <window_info anchor="right" id="Coverage" show_stripe_button="false" side_tool="true" />
+      <window_info anchor="right" content_ui="combo" id="Notifications" order="0" weight="0.25" />
+      <window_info anchor="right" id="AIAssistant" order="1" weight="0.25" />
+      <window_info anchor="right" id="Database" order="2" weight="0.25" />
+      <window_info anchor="right" id="Gradle" order="3" weight="0.25" />
+      <window_info anchor="right" id="Maven" order="4" weight="0.25" />
+    </layout>
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/server/src/test/java/passoff/server" />
+      <recent name="$PROJECT_DIR$/server/src/main/java/dataaccess" />
+      <recent name="$PROJECT_DIR$/server/src/main/resources" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="dataaccess" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn compile" />
+      <command value="mvn test" />
+    </option>
+  </component>
+  <component name="RunManager" selected="JUnit.java in server">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="server" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SQLAuthDAOTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="mytestutilities.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="dataaccess" />
+      <option name="MAIN_CLASS_NAME" value="dataaccess.SQLAuthDAOTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SQLGameDAOTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="mytestutilities.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="dataaccess" />
+      <option name="MAIN_CLASS_NAME" value="dataaccess.SQLGameDAOTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="dataaccess in server" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="server" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/server/src/test/java/dataaccess" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="java in server" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="server" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/server/src/test/java" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.java in server" />
+        <item itemvalue="JUnit.dataaccess in server" />
+        <item itemvalue="JUnit.SQLGameDAOTests" />
+        <item itemvalue="JUnit.SQLAuthDAOTests" />
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="77000de6-8a97-475d-b725-f7d6cae74905" name="Changes" comment="" />
+      <created>1721882031011</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1721882031011</updated>
+      <workItem from="1721882032637" duration="386000" />
+      <workItem from="1721882542295" duration="558000" />
+      <workItem from="1722272628695" duration="9000" />
+      <workItem from="1722273055687" duration="1934000" />
+      <workItem from="1722275342724" duration="8000" />
+      <workItem from="1722275648595" duration="329000" />
+      <workItem from="1722276196906" duration="7000" />
+      <workItem from="1722276559428" duration="64000" />
+      <workItem from="1722279490455" duration="3681000" />
+      <workItem from="1722299308880" duration="7000" />
+      <workItem from="1722299904914" duration="12000" />
+      <workItem from="1722357252403" duration="12000" />
+      <workItem from="1722358908617" duration="11000" />
+      <workItem from="1722358969871" duration="339000" />
+      <workItem from="1722392935389" duration="5195000" />
+      <workItem from="1722439594569" duration="12481000" />
+      <workItem from="1722452313552" duration="17143000" />
+    </task>
+    <task id="LOCAL-00001" summary="Updated for readability.">
+      <option name="closed" value="true" />
+      <created>1721882911866</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1721882911866</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Updated .rel() to allow for invalid positions.">
+      <option name="closed" value="true" />
+      <created>1722280311583</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1722280311583</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Updated kingMoves, queenMoves, rookMoves, and bishopMoves to all use addMoves().">
+      <option name="closed" value="true" />
+      <created>1722280385339</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1722280385339</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Updated spacing.">
+      <option name="closed" value="true" />
+      <created>1722280406684</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1722280406684</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Updated">
+      <option name="closed" value="true" />
+      <created>1722280643802</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1722280643802</updated>
+    </task>
+    <task id="LOCAL-00006" summary="fixed a crash">
+      <option name="closed" value="true" />
+      <created>1722281701027</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1722281701027</updated>
+    </task>
+    <task id="LOCAL-00007" summary="rolled back rel, added relUnsafe that allows out of bounds positions.">
+      <option name="closed" value="true" />
+      <created>1722281730552</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1722281730552</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Deleted isMoved flag on the piece.">
+      <option name="closed" value="true" />
+      <created>1722281760749</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1722281760749</updated>
+    </task>
+    <task id="LOCAL-00009" summary="updated">
+      <option name="closed" value="true" />
+      <created>1722463044348</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1722463044348</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Clarified some field names.">
+      <option name="closed" value="true" />
+      <created>1722463074175</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1722463074175</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Implemented SQL DAOs.">
+      <option name="closed" value="true" />
+      <created>1722463120579</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1722463120579</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Added getIdField() so that people can see the field and type of getId().">
+      <option name="closed" value="true" />
+      <created>1722463185558</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1722463185558</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Changed the DAO type to SQL">
+      <option name="closed" value="true" />
+      <created>1722463314797</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1722463314797</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Changed the DAO type to SQL">
+      <option name="closed" value="true" />
+      <created>1722463322279</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1722463322279</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Added password hashing so that we don't store unencrypted passwords :)">
+      <option name="closed" value="true" />
+      <created>1722463353169</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1722463353169</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Implemented the tests and fixed a bug from incorrectly calling remove.">
+      <option name="closed" value="true" />
+      <created>1722469822980</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1722469822980</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Implemented equals and hashCode.">
+      <option name="closed" value="true" />
+      <created>1722469852414</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1722469852414</updated>
+    </task>
+    <task id="LOCAL-00018" summary="set generateJSONTable to private">
+      <option name="closed" value="true" />
+      <created>1722469880091</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1722469880091</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Implemented these by inheriting from SQLParentDAOTests and setting initial values.">
+      <option name="closed" value="true" />
+      <created>1722469917404</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1722469917404</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Trying to make the github repo be buildable with maven.">
+      <option name="closed" value="true" />
+      <created>1722470506093</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1722470506093</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Updated for readability." />
+    <MESSAGE value="Updated .rel() to allow for invalid positions." />
+    <MESSAGE value="Updated kingMoves, queenMoves, rookMoves, and bishopMoves to all use addMoves()." />
+    <MESSAGE value="Updated spacing." />
+    <MESSAGE value="Updated" />
+    <MESSAGE value="fixed a crash" />
+    <MESSAGE value="rolled back rel, added relUnsafe that allows out of bounds positions." />
+    <MESSAGE value="Deleted isMoved flag on the piece." />
+    <MESSAGE value="updated" />
+    <MESSAGE value="Clarified some field names." />
+    <MESSAGE value="Implemented SQL DAOs." />
+    <MESSAGE value="Added getIdField() so that people can see the field and type of getId()." />
+    <MESSAGE value="Changed the DAO type to SQL" />
+    <MESSAGE value="Added password hashing so that we don't store unencrypted passwords :)" />
+    <MESSAGE value="Implemented the tests and fixed a bug from incorrectly calling remove." />
+    <MESSAGE value="Implemented equals and hashCode." />
+    <MESSAGE value="set generateJSONTable to private" />
+    <MESSAGE value="Implemented these by inheriting from SQLParentDAOTests and setting initial values." />
+    <MESSAGE value="Trying to make the github repo be buildable with maven." />
+    <option name="LAST_COMMIT_MESSAGE" value="Trying to make the github repo be buildable with maven." />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
