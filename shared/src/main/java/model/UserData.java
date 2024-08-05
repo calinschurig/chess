@@ -15,4 +15,12 @@ public record UserData(
             throw new RuntimeException(e);
         }
     }
+
+    public int compareTo(UserData o) {
+        return username.compareTo(o.username);
+    }
+
+    public int compareTo(Identifier<String> o) {
+        return getId().compareTo(o.getId());
+    }
 }

@@ -15,4 +15,8 @@ public record AuthData (
             throw new RuntimeException(e);
         }
     }
+
+    public int compareTo(Identifier<String> o) {
+        return this.getId().compareTo(o.getId());
+    }
 }

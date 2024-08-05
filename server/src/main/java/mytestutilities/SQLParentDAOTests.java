@@ -78,7 +78,9 @@ public class SQLParentDAOTests<K, V extends Identifier<K>> {
         sqlDAO.add(data);
         memoryDAO.update(data.getId(), differentData);
         sqlDAO.update(data.getId(), differentData);
-        Assertions.assertArrayEquals(memoryDAO.getAll().toArray(), sqlDAO.getAll().toArray());
+        Object[] memAll = memoryDAO.getAll().stream().sorted().toArray();
+        Object[] sqlAll =  sqlDAO.getAll().stream().sorted().toArray();
+        Assertions.assertArrayEquals(memAll, sqlAll);
     }
 
     @Test
@@ -91,8 +93,9 @@ public class SQLParentDAOTests<K, V extends Identifier<K>> {
         Assertions.assertThrows(DataAccessException.class, () -> sqlDAO.update(differentData.getId(), data));
         Assertions.assertThrows(DataAccessException.class, () -> memoryDAO.update(bogusData.getId(), differentData));
         Assertions.assertThrows(DataAccessException.class, () -> memoryDAO.update(bogusData.getId(), differentData));
-        Assertions.assertArrayEquals(memoryDAO.getAll().toArray(), sqlDAO.getAll().toArray());
-    }
+        Object[] memAll = memoryDAO.getAll().stream().sorted().toArray();
+        Object[] sqlAll =  sqlDAO.getAll().stream().sorted().toArray();
+        Assertions.assertArrayEquals(memAll, sqlAll);    }
 
     @Test
     @Order(9)
@@ -102,8 +105,9 @@ public class SQLParentDAOTests<K, V extends Identifier<K>> {
         sqlDAO.add(data);
         memoryDAO.add(differentData);
         sqlDAO.add(differentData);
-        Assertions.assertArrayEquals(memoryDAO.getAll().toArray(), sqlDAO.getAll().toArray());
-    }
+        Object[] memAll = memoryDAO.getAll().stream().sorted().toArray();
+        Object[] sqlAll =  sqlDAO.getAll().stream().sorted().toArray();
+        Assertions.assertArrayEquals(memAll, sqlAll);    }
 
     @Test
     @Order(10)

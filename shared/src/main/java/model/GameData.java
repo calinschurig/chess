@@ -17,4 +17,8 @@ public record GameData(
             throw new RuntimeException(e);
         }
     }
+
+    public int compareTo(Identifier<Integer> o) {
+        return Integer.compare(this.getId(), o.getId());
+    }
 }
