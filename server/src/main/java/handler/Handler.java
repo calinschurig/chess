@@ -2,6 +2,7 @@ package handler;
 
 import chess.ChessGame;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
@@ -70,9 +71,10 @@ public class Handler {
         return new Gson().toJson(new CreateGameResult(GameService.createGame(gameRequest.gameName(), gameDAO)));
     }
 
-    private record ListGamesRequest(Collection<model.GameData> games) {}
+    private record ListGamesResponse(Collection<model.GameData> games) {}
     public Object listGames(Request req, Response res) {
-        return new Gson().toJson(new ListGamesRequest(GameService.listGames(gameDAO)));
+        Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+        return gson.toJson(new ListGamesResponse(GameService.listGames(gameDAO)));
     }
 
     public Object logout(Request req, Response res) throws DataAccessException {
