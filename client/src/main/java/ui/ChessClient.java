@@ -270,9 +270,14 @@ public class ChessClient {
         }
         int gameId = gameIndextoId.get(gameNum);
         try {
-            return boardString(facade.gamesMap(auth).get(gameId), ChessGame.TeamColor.WHITE,
-                    EscapeSequences.SET_BG_COLOR_DARK_GREEN, EscapeSequences.SET_BG_COLOR_GREEN,
+            String out = boardString(facade.gamesMap(auth).get(gameId), ChessGame.TeamColor.WHITE,
+                    EscapeSequences.SET_BG_COLOR_DARK_GREEN, EscapeSequences.SET_BG_COLOR_BLUE,
+                    EscapeSequences.SET_BG_COLOR_LIGHT_GREY)
+                    + "\n"
+                    + boardString(facade.gamesMap(auth).get(gameId), ChessGame.TeamColor.BLACK,
+                    EscapeSequences.SET_BG_COLOR_DARK_GREEN, ui.EscapeSequences.SET_BG_COLOR_BLUE,
                     EscapeSequences.SET_BG_COLOR_LIGHT_GREY);
+            return out;
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         } catch (RejectedRequestException e) {
