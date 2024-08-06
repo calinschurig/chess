@@ -45,13 +45,6 @@ public class ServerFacadeTests {
         server.stop();
     }
 
-
-//    @Test
-//    public void sampleTest() {
-//        Assertions.assertTrue(true);
-//    }
-
-
     @Test
     @Order (1)
     @DisplayName("Valid register")
