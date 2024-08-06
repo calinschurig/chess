@@ -16,7 +16,7 @@ import java.util.concurrent.RejectedExecutionException;
 public class ServerFacade {
     private URL url;
 //    private AuthData auth;
-    private static final Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
+    private static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 
     public ServerFacade(String url) throws MalformedURLException {
         this.url = new URL(url);
@@ -51,7 +51,7 @@ public class ServerFacade {
         con.connect();
 
         try (OutputStream os = con.getOutputStream()) {
-            os.write(gson.toJson(new JoinGameRequest(playerColor, gameId)).getBytes());
+            os.write(GSON.toJson(new JoinGameRequest(playerColor, gameId)).getBytes());
         }
 
         if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -71,10 +71,9 @@ public class ServerFacade {
         con.setDoOutput(true);
         con.setRequestProperty("Authorization", authToken);
         con.connect();
-//{"games":[{"gameID":140541434,"gameName":"New-game","game":{"board":{"boardArray":[[{"color":"WHITE","type":"ROOK"},{"color":"WHITE","type":"KNIGHT"},{"color":"WHITE","type":"BISHOP"},{"color":"WHITE","type":"QUEEN"},{"color":"WHITE","type":"KING"},{"color":"WHITE","type":"BISHOP"},{"color":"WHITE","type":"KNIGHT"},{"color":"WHITE","type":"ROOK"}],[{"color":"WHITE","type":"PAWN"},{"color":"WHITE","type":"PAWN"},{"color":"WHITE","type":"PAWN"},{"color":"WHITE","type":"PAWN"},{"color":"WHITE","type":"PAWN"},{"color":"WHITE","type":"PAWN"},{"color":"WHITE","type":"PAWN"},{"color":"WHITE","type":"PAWN"}],[null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null],[{"color":"BLACK","type":"PAWN"},{"color":"BLACK","type":"PAWN"},{"color":"BLACK","type":"PAWN"},{"color":"BLACK","type":"PAWN"},{"color":"BLACK","type":"PAWN"},{"color":"BLACK","type":"PAWN"},{"color":"BLACK","type":"PAWN"},{"color":"BLACK","type":"PAWN"}],[{"color":"BLACK","type":"ROOK"},{"color":"BLACK","type":"KNIGHT"},{"color":"BLACK","type":"BISHOP"},{"color":"BLACK","type":"QUEEN"},{"color":"BLACK","type":"KING"},{"color":"BLACK","type":"BISHOP"},{"color":"BLACK","type":"KNIGHT"},{"color":"BLACK","type":"ROOK"}]],"piecesMap":{"(2,1)":{"color":"WHITE","type":"PAWN"},"(2,2)":{"color":"WHITE","type":"PAWN"},"(2,3)":{"color":"WHITE","type":"PAWN"},"(2,4)":{"color":"WHITE","type":"PAWN"},"(2,5)":{"color":"WHITE","type":"PAWN"},"(2,6)":{"color":"WHITE","type":"PAWN"},"(2,7)":{"color":"WHITE","type":"PAWN"},"(2,8)":{"color":"WHITE","type":"PAWN"},"(7,1)":{"color":"BLACK","type":"PAWN"},"(7,2)":{"color":"BLACK","type":"PAWN"},"(7,3)":{"color":"BLACK","type":"PAWN"},"(7,4)":{"color":"BLACK","type":"PAWN"},"(7,5)":{"color":"BLACK","type":"PAWN"},"(7,6)":{"color":"BLACK","type":"PAWN"},"(7,7)":{"color":"BLACK","type":"PAWN"},"(7,8)":{"color":"BLACK","type":"PAWN"},"(8,1)":{"color":"BLACK","type":"ROOK"},"(8,2)":{"color":"BLACK","type":"KNIGHT"},"(8,3)":{"color":"BLACK","type":"BISHOP"},"(8,4)":{"color":"BLACK","type":"QUEEN"},"(8,5)":{"color":"BLACK","type":"KING"},"(8,6)":{"color":"BLACK","type":"BISHOP"},"(8,7)":{"color":"BLACK","type":"KNIGHT"},"(8,8)":{"color":"BLACK","type":"ROOK"},"(1,1)":{"color":"WHITE","type":"ROOK"},"(1,2)":{"color":"WHITE","type":"KNIGHT"},"(1,3)":{"color":"WHITE","type":"BISHOP"},"(1,4)":{"color":"WHITE","type":"QUEEN"},"(1,5)":{"color":"WHITE","type":"KING"},"(1,6)":{"color":"WHITE","type":"BISHOP"},"(1,7)":{"color":"WHITE","type":"KNIGHT"},"(1,8)":{"color":"WHITE","type":"ROOK"}}},"moves":[],"turn":"WHITE"}}]}
         if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
 //            System.out.println(new String(con.getInputStream().readAllBytes()));
-            ListGamesResponse games = gson.fromJson(new String(con.getInputStream().readAllBytes()), ListGamesResponse.class);
+            ListGamesResponse games = GSON.fromJson(new String(con.getInputStream().readAllBytes()), ListGamesResponse.class);
             return games.games();
         } else {
             throw new RejectedRequestException("Unable to list games: " + getErrMessage(con));
@@ -179,7 +178,7 @@ public class ServerFacade {
         } else {
 //            String err = con.getResponseMessage();
             String err = new String(con.getErrorStream().readAllBytes());
-            throw new RejectedRequestException("Server rejected register: " + gson.fromJson(err, Message.class).message());
+            throw new RejectedRequestException("Server rejected register: " + GSON.fromJson(err, Message.class).message());
         }
     }
 
@@ -199,7 +198,7 @@ public class ServerFacade {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return gson.fromJson(jsonString, clazz);
+        return GSON.fromJson(jsonString, clazz);
     }
 
     private record Message(String message) {};
