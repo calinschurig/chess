@@ -9,13 +9,11 @@ import server.facade.RejectedRequestException;
 import server.facade.ServerFacade;
 
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.function.Function;
 
 public class ChessClient {
     private ServerFacade facade;
@@ -275,7 +273,7 @@ public class ChessClient {
                     EscapeSequences.SET_BG_COLOR_LIGHT_GREY)
                     + "\n"
                     + boardString(facade.gamesMap(auth).get(gameId), ChessGame.TeamColor.BLACK,
-                    EscapeSequences.SET_BG_COLOR_DARK_GREEN, ui.EscapeSequences.SET_BG_COLOR_BLUE,
+                    EscapeSequences.SET_BG_COLOR_DARK_GREEN, EscapeSequences.SET_BG_COLOR_BLUE,
                     EscapeSequences.SET_BG_COLOR_LIGHT_GREY);
             return out;
         } catch (IOException e) {
@@ -356,7 +354,7 @@ public class ChessClient {
                 }
             }
         }
-        sb.append(ui.EscapeSequences.RESET_BG_COLOR);
+        sb.append(EscapeSequences.RESET_BG_COLOR);
         return sb.toString();
     }
 
@@ -365,12 +363,12 @@ public class ChessClient {
         final char start = orientation == ChessGame.TeamColor.WHITE? 'a' : 'h';
         final char end = orientation == ChessGame.TeamColor.WHITE? 'i' : '`';
         final int dir = orientation == ChessGame.TeamColor.WHITE? 1 : -1;
-        sb.append(outlineColor).append(ui.EscapeSequences.EMPTY);
+        sb.append(outlineColor).append(EscapeSequences.EMPTY);
         for (char i = start; i != end; i+=dir) {
             sb.append("\u2005\u2004\u2005" + i + "\u2005\u2004\u2005");
         }
         sb.append(EscapeSequences.EMPTY);
-        sb.append(ui.EscapeSequences.RESET_BG_COLOR);
+        sb.append(EscapeSequences.RESET_BG_COLOR);
         return sb.toString();
     }
 
