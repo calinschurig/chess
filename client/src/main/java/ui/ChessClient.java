@@ -1,5 +1,8 @@
 package ui;
 
+import chess.ChessGame;
+import chess.ChessPosition;
+import chess.EscapeSequences;
 import model.AuthData;
 import model.GameData;
 import server.facade.RejectedRequestException;
@@ -257,9 +260,24 @@ public class ChessClient {
         return "Joined game " + gameNum + " to " + args[1].toUpperCase();
     }
     private String observeGame(String[] args) {
-
-
-        return "todo";
+        checkArgs(new Class[] {int.class}, args);
+        int gameNum = Integer.parseInt(args[0]);
+        if (gameIndextoId == null) {
+            return "Please list games before attempting to observe. ";
+        }
+        if (!gameIndextoId.containsKey(gameNum)) {
+            return "Invalid argument: please use numbers listed by the LIST command";
+        }
+        int gameId = gameIndextoId.get(gameNum);
+        try {
+            return boardString(facade.gamesMap(auth).get(gameId), ChessGame.TeamColor.WHITE,
+                    EscapeSequences.SET_BG_COLOR_DARK_GREEN, EscapeSequences.SET_BG_COLOR_GREEN,
+                    EscapeSequences.SET_BG_COLOR_LIGHT_GREY);
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
+        } catch (RejectedRequestException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     private void checkArgs(Class[] argTypes, String[] args) {
@@ -289,10 +307,66 @@ public class ChessClient {
         }
     }
 
-    private void loggedInCheck() {
-        if (!loggedIn) {
+    private String boardString(GameData game, ChessGame.TeamColor orientation,
+                               String darkBoardColor, String lightBoardColor,
+                               String outlineColor) {
+        StringBuilder sb = new StringBuilder();
 
+        final int start = orientation == ChessGame.TeamColor.WHITE? 8 : 1;
+        final int end = orientation == ChessGame.TeamColor.WHITE? 0 : 9;
+        final int dir = orientation == ChessGame.TeamColor.WHITE? -1 : 1;
+        sb.append(outlineRowString(orientation, outlineColor)).append("\n");
+        for (int i = start; i != end; i+=dir) {
+            sb.append(boardRowString(i, game, orientation, darkBoardColor, lightBoardColor, outlineColor));
+            sb.append("\n");
         }
+        sb.append(outlineRowString(orientation, outlineColor)).append("\n");
+        return sb.toString();
+    }
+
+    private String boardRowString(int row, GameData game, ChessGame.TeamColor orientation,
+                                  String darkBoardColor, String lightBoardColor,
+                                  String outlineColor) {
+        StringBuilder sb = new StringBuilder();
+
+        final int start = orientation == ChessGame.TeamColor.WHITE? 0 : 9;
+        final int end = orientation == ChessGame.TeamColor.WHITE? 10 : -1;
+        final int dir = orientation == ChessGame.TeamColor.WHITE? 1 : -1;
+        for (int i = start; i != end; i+=dir) {
+            if (i == 0 | i == 9) {
+                sb.append(outlineColor).append("\u2005\u2004\u2005" + row + "\u2005\u2004\u2005");
+            } else if ( (row + i) % 2 == 1) {
+                sb.append(lightBoardColor);
+                try {
+                    sb.append(game.game().getBoard().getPiece(new ChessPosition(row, i)).fancyToString());
+                } catch (NullPointerException e) {
+                    sb.append(EscapeSequences.EMPTY);
+                }
+            } else {
+                sb.append(darkBoardColor);
+                try {
+                    sb.append(game.game().getBoard().getPiece(new ChessPosition(row, i)).fancyToString());
+                } catch (NullPointerException e) {
+                    sb.append(EscapeSequences.EMPTY);
+                }
+            }
+        }
+        sb.append(ui.EscapeSequences.RESET_BG_COLOR);
+        return sb.toString();
+    }
+
+    private String outlineRowString(ChessGame.TeamColor orientation, String outlineColor) {
+        StringBuilder sb = new StringBuilder();
+        final char start = orientation == ChessGame.TeamColor.WHITE? 'a' : 'h';
+        final char end = orientation == ChessGame.TeamColor.WHITE? 'i' : '`';
+        final int dir = orientation == ChessGame.TeamColor.WHITE? 1 : -1;
+        sb.append(outlineColor).append(ui.EscapeSequences.EMPTY);
+        for (char i = start; i != end; i+=dir) {
+            sb.append("\u2005\u2004\u2005" + i + "\u2005\u2004\u2005");
+        }
+        sb.append(EscapeSequences.EMPTY);
+        sb.append(ui.EscapeSequences.RESET_BG_COLOR);
+        return sb.toString();
     }
 
 }

@@ -2,6 +2,7 @@ package chess;
 
 import java.util.*;
 import java.util.function.Function;
+import chess.EscapeSequences;
 
 /**
  * Represents a single chess piece
@@ -370,6 +371,35 @@ public class ChessPiece {
             case PAWN -> toReturn += "P";
             case null -> toReturn += "null";
         }
+        return toReturn;
+    }
+
+    public String fancyToString() {
+        String toReturn = "";
+        if (color == ChessGame.TeamColor.WHITE) {
+            toReturn += EscapeSequences.SET_TEXT_COLOR_WHITE;
+            switch (type) {
+                case KING -> toReturn += EscapeSequences.WHITE_KING;
+                case QUEEN -> toReturn += EscapeSequences.WHITE_QUEEN;
+                case ROOK -> toReturn += EscapeSequences.WHITE_ROOK;
+                case BISHOP -> toReturn += EscapeSequences.WHITE_BISHOP;
+                case KNIGHT -> toReturn += EscapeSequences.WHITE_KNIGHT;
+                case PAWN -> toReturn += EscapeSequences.WHITE_PAWN;
+                default -> toReturn += EscapeSequences.EMPTY;
+            }
+        } else {
+            toReturn += EscapeSequences.SET_TEXT_COLOR_BLACK;
+            switch (type) {
+                case KING -> toReturn += EscapeSequences.BLACK_KING;
+                case QUEEN -> toReturn += EscapeSequences.BLACK_QUEEN;
+                case ROOK -> toReturn += EscapeSequences.BLACK_ROOK;
+                case BISHOP -> toReturn += EscapeSequences.BLACK_BISHOP;
+                case KNIGHT -> toReturn += EscapeSequences.BLACK_KNIGHT;
+                case PAWN -> toReturn += EscapeSequences.BLACK_PAWN;
+                default -> toReturn += EscapeSequences.EMPTY;
+            }
+        }
+        toReturn += EscapeSequences.RESET_TEXT_COLOR;
         return toReturn;
     }
 
