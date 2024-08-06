@@ -3,17 +3,20 @@ package server.facade;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.AuthData;
+import model.GameData;
 import model.UserData;
 
 import java.io.*;
 import java.net.*;
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.RejectedExecutionException;
 
 public class ServerFacade {
     private URL url;
 //    private AuthData auth;
-    private static final Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
+    private static final Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
 
     public ServerFacade(String url) throws MalformedURLException {
         this.url = new URL(url);
@@ -26,7 +29,94 @@ public class ServerFacade {
         }
     }
 
+    public void clear() throws IOException, RejectedExecutionException {
+        HttpURLConnection con = resolve("/db");
+        con.setRequestMethod("DELETE");
+        con.connect();
 
+        if (con.getResponseCode() != HttpURLConnection.HTTP_OK) {
+            throw new RejectedExecutionException("Unable to delete database: " + getErrMessage(con));
+        }
+    }
+
+    private record JoinGameRequest(String playerColor, int gameID) {}
+    public void joinGame(int gameId, String playerColor, AuthData authToken) throws IOException, RejectedRequestException {
+        joinGame(gameId, playerColor, authToken.authToken());
+    }
+    public void joinGame(int gameId, String playerColor, String authToken) throws IOException, RejectedRequestException {
+        HttpURLConnection con = resolve("/game");
+        con.setRequestMethod("PUT");
+        con.setDoOutput(true);
+        con.setRequestProperty("Authorization", authToken);
+        con.connect();
+
+        try (OutputStream os = con.getOutputStream()) {
+            os.write(gson.toJson(new JoinGameRequest(playerColor, gameId)).getBytes());
+        }
+
+        if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
+            // good job!
+        } else {
+            throw new RejectedRequestException("Unable to join game: " + getErrMessage(con));
+        }
+    }
+
+    private record ListGamesResponse(Collection<model.GameData> games) {}
+    public Collection<GameData> listGames(AuthData authToken) throws IOException, RejectedRequestException {
+        return listGames(authToken.authToken());
+    }
+    public Collection<GameData> listGames(String authToken) throws IOException, RejectedRequestException {
+        HttpURLConnection con = resolve("/game");
+        con.setRequestMethod("GET");
+        con.setDoOutput(true);
+        con.setRequestProperty("Authorization", authToken);
+        con.connect();
+//{"games":[{"gameID":140541434,"gameName":"New-game","game":{"board":{"boardArray":[[{"color":"WHITE","type":"ROOK"},{"color":"WHITE","type":"KNIGHT"},{"color":"WHITE","type":"BISHOP"},{"color":"WHITE","type":"QUEEN"},{"color":"WHITE","type":"KING"},{"color":"WHITE","type":"BISHOP"},{"color":"WHITE","type":"KNIGHT"},{"color":"WHITE","type":"ROOK"}],[{"color":"WHITE","type":"PAWN"},{"color":"WHITE","type":"PAWN"},{"color":"WHITE","type":"PAWN"},{"color":"WHITE","type":"PAWN"},{"color":"WHITE","type":"PAWN"},{"color":"WHITE","type":"PAWN"},{"color":"WHITE","type":"PAWN"},{"color":"WHITE","type":"PAWN"}],[null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null],[{"color":"BLACK","type":"PAWN"},{"color":"BLACK","type":"PAWN"},{"color":"BLACK","type":"PAWN"},{"color":"BLACK","type":"PAWN"},{"color":"BLACK","type":"PAWN"},{"color":"BLACK","type":"PAWN"},{"color":"BLACK","type":"PAWN"},{"color":"BLACK","type":"PAWN"}],[{"color":"BLACK","type":"ROOK"},{"color":"BLACK","type":"KNIGHT"},{"color":"BLACK","type":"BISHOP"},{"color":"BLACK","type":"QUEEN"},{"color":"BLACK","type":"KING"},{"color":"BLACK","type":"BISHOP"},{"color":"BLACK","type":"KNIGHT"},{"color":"BLACK","type":"ROOK"}]],"piecesMap":{"(2,1)":{"color":"WHITE","type":"PAWN"},"(2,2)":{"color":"WHITE","type":"PAWN"},"(2,3)":{"color":"WHITE","type":"PAWN"},"(2,4)":{"color":"WHITE","type":"PAWN"},"(2,5)":{"color":"WHITE","type":"PAWN"},"(2,6)":{"color":"WHITE","type":"PAWN"},"(2,7)":{"color":"WHITE","type":"PAWN"},"(2,8)":{"color":"WHITE","type":"PAWN"},"(7,1)":{"color":"BLACK","type":"PAWN"},"(7,2)":{"color":"BLACK","type":"PAWN"},"(7,3)":{"color":"BLACK","type":"PAWN"},"(7,4)":{"color":"BLACK","type":"PAWN"},"(7,5)":{"color":"BLACK","type":"PAWN"},"(7,6)":{"color":"BLACK","type":"PAWN"},"(7,7)":{"color":"BLACK","type":"PAWN"},"(7,8)":{"color":"BLACK","type":"PAWN"},"(8,1)":{"color":"BLACK","type":"ROOK"},"(8,2)":{"color":"BLACK","type":"KNIGHT"},"(8,3)":{"color":"BLACK","type":"BISHOP"},"(8,4)":{"color":"BLACK","type":"QUEEN"},"(8,5)":{"color":"BLACK","type":"KING"},"(8,6)":{"color":"BLACK","type":"BISHOP"},"(8,7)":{"color":"BLACK","type":"KNIGHT"},"(8,8)":{"color":"BLACK","type":"ROOK"},"(1,1)":{"color":"WHITE","type":"ROOK"},"(1,2)":{"color":"WHITE","type":"KNIGHT"},"(1,3)":{"color":"WHITE","type":"BISHOP"},"(1,4)":{"color":"WHITE","type":"QUEEN"},"(1,5)":{"color":"WHITE","type":"KING"},"(1,6)":{"color":"WHITE","type":"BISHOP"},"(1,7)":{"color":"WHITE","type":"KNIGHT"},"(1,8)":{"color":"WHITE","type":"ROOK"}}},"moves":[],"turn":"WHITE"}}]}
+        if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
+//            System.out.println(new String(con.getInputStream().readAllBytes()));
+            ListGamesResponse games = gson.fromJson(new String(con.getInputStream().readAllBytes()), ListGamesResponse.class);
+            return games.games();
+        } else {
+            throw new RejectedRequestException("Unable to list games: " + getErrMessage(con));
+        }
+    }
+    public Map<Integer, GameData> gamesMap(AuthData authToken) throws IOException, RejectedRequestException {
+        return gamesMap(authToken.authToken());
+    }
+    public Map<Integer, GameData> gamesMap(String authToken) throws IOException, RejectedRequestException {
+        HashMap<Integer, GameData> gamesMap = new HashMap<>();
+        for (GameData game: listGames(authToken)) {
+            gamesMap.put(game.gameID(), game);
+        }
+        return gamesMap;
+    }
+
+    private record CreateGameRequest(String gameName) {}
+    private record CreateGameResult(int gameID) {}
+    public int createGame(String gameName, AuthData authToken) throws IOException, RejectedRequestException {
+        return createGame(gameName, authToken.authToken());
+    }
+    public int createGame(String gameName, String authToken) throws IOException, RejectedRequestException {
+        HttpURLConnection con = resolve("/game");
+        con.setRequestMethod("POST");
+        con.setDoOutput(true);
+        con.setRequestProperty("Content-Type", "application/json");
+        con.setRequestProperty("Accept", "application/json");
+        con.setRequestProperty("Authorization", authToken);
+        con.connect();
+        CreateGameRequest req = new CreateGameRequest(gameName);
+        try (OutputStream os = con.getOutputStream()) {
+//            os.write(gson.toJson(req).getBytes());
+            os.write(("{\"gameName\": \"" + gameName + "\"}").getBytes());
+        }
+
+        if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
+            CreateGameResult game = parseJsonConnection(con.getInputStream(), CreateGameResult.class);
+            return game.gameID();
+        } else {
+            throw new RejectedRequestException("Unable to create game. " + getErrMessage(con));
+        }
+    }
 
     public void logout(AuthData auth) throws IOException, RejectedRequestException {
         logout(auth.authToken());
@@ -39,11 +129,14 @@ public class ServerFacade {
         con.connect();
 
         if (con.getResponseCode() != HttpURLConnection.HTTP_OK) {
-            throw new RejectedRequestException(con.getResponseMessage());
+            throw new RejectedRequestException("Error: unable to logout: " + getErrMessage(con));
         }
 
     }
 
+    public AuthData login(UserData user) throws IOException, RejectedRequestException {
+        return login(user.username(), user.password());
+    }
     public AuthData login(String username, String password) throws IOException, RejectedRequestException {
         HttpURLConnection con = resolve("/session");
         con.setRequestMethod("POST");
@@ -61,7 +154,7 @@ public class ServerFacade {
             AuthData auth = parseJsonConnection(con.getInputStream(), AuthData.class);
             return auth;
         } else {
-            throw new RejectedRequestException("Unable to log in: " + new String( con.getErrorStream().readAllBytes()) );
+            throw new RejectedRequestException("Unable to log in: " + getErrMessage(con) );
         }
 
     }
@@ -86,7 +179,7 @@ public class ServerFacade {
         } else {
 //            String err = con.getResponseMessage();
             String err = new String(con.getErrorStream().readAllBytes());
-            throw new RejectedRequestException("Server rejected register: " + err);
+            throw new RejectedRequestException("Server rejected register: " + gson.fromJson(err, Message.class).message());
         }
     }
 
@@ -107,6 +200,12 @@ public class ServerFacade {
             throw new RuntimeException(e);
         }
         return gson.fromJson(jsonString, clazz);
+    }
+
+    private record Message(String message) {};
+    private String getErrMessage(HttpURLConnection con) throws IOException {
+        String jsonStr = new String(con.getErrorStream().readAllBytes());
+        return new Gson().fromJson(jsonStr, Message.class).message();
     }
 
 }
