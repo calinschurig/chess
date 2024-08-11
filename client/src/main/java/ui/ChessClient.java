@@ -141,6 +141,7 @@ public class ChessClient {
                 create <NAME> - a game
                 list - games
                 join <ID> [WHITE|BLACK] - a game
+                observe <ID> - view a game
                 logout - when you are done
                 quit - playing chess
                 help - with possible commands""";
