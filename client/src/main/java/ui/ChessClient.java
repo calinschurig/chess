@@ -55,7 +55,9 @@ public class ChessClient {
             String command = ClientHelper.getCommand(line);
             String[] args = ClientHelper.getArgs(line);
             try {
-                String commandOut = (loggedIn) ? runCommandPost(command, args) : runCommandPre(command, args);
+                String commandOut = (!loggedIn) ? runCommandPre(command, args)
+                        : (inGame) ? runCommandGame(command, args)
+                        : runCommandPost(command, args);
                 System.out.println( commandOut );
 //            } catch (ConnectException ce) {
 //                System.out.println(ce.getMessage());
@@ -123,10 +125,10 @@ public class ChessClient {
         }
     }
 
-    public static String runCommandGame(String command, String[] args) {
+    public String runCommandGame(String command, String[] args) {
         switch (command) {
             case "redraw" -> {
-                return redraw(args);
+                return redraw(args, wsClient, auth, currentGame);
             }
             case "leave" -> {
                 return leave(args);
@@ -260,10 +262,12 @@ public class ChessClient {
             throw new RuntimeException(e.getMessage());
         }
         try {
-            wsClient = new WSClient(facade.getUrlAsString() + "/ws");
+            wsClient = new WSClient(facade.getUrlAsString().replaceFirst("http://", "ws://") + "ws");
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
+        currentGame = gameId;
+        inGame = true;
         return "Joined game " + gameNum + " to " + args[1].toUpperCase();
     }
 
