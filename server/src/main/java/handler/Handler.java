@@ -8,24 +8,49 @@ import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
 import dataaccess.UserDAO;
+import model.GameData;
 import model.UserData;
+import org.eclipse.jetty.websocket.api.*;
+import org.eclipse.jetty.websocket.api.annotations.*;
+import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import service.GameService;
 import service.UserService;
 import spark.Request;
 import spark.Response;
+import websocket.commands.CommandContainer;
+import websocket.messages.ErrorMessage;
+import websocket.messages.LoadGameMessage;
+import websocket.messages.MessageContainer;
+import websocket.messages.ServerMessage;
 
 import java.util.Collection;
 
+import static handler.WsHandlerHelper.helperOnMessage;
+
+@WebSocket
 public class Handler {
+    private final Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
     private final UserDAO userDAO;
     private final GameDAO gameDAO;
     private final AuthDAO authDAO;
+
+    @OnWebSocketMessage
+    public void onMessage(Session session, String message) throws Exception {
+        System.out.printf("Received: %s", message);
+        session.getRemote().sendString("WebSocket response: " + message);
+
+        CommandContainer commandContainer = gson.fromJson(message, CommandContainer.class);
+        int gameId = commandContainer.userGameCommand.getGameID();
+        helperOnMessage(session, commandContainer, userDAO, gameDAO, authDAO);
+    }
 
     public Handler(UserDAO userDAO, GameDAO gameDAO, AuthDAO authDAO) {
         this.userDAO = userDAO;
         this.gameDAO = gameDAO;
         this.authDAO = authDAO;
     }
+
+
 
     private record JoinGameRequest(String playerColor, int gameID) {}
     public Object joinGame(Request req, Response res) {

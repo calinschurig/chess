@@ -15,10 +15,10 @@ public class GameClient {
 
     public static String redraw(String[] args, WSClient wsClient, AuthData auth, int gameId) {
         checkArgs(new Class[] {}, args);
-        UserGameCommand  command = new UserGameCommand(UserGameCommand.CommandType.CONNECT, auth.authToken(), gameId);
-        CommandContainer container = new CommandContainer(null, command, UserGameCommand.CommandType.CONNECT);
+//        UserGameCommand  command = new UserGameCommand();
+        CommandContainer commandContainer = new CommandContainer(UserGameCommand.CommandType.CONNECT, auth.authToken(), gameId);
         try {
-            wsClient.send(new Gson().toJson(container));
+            wsClient.send(new Gson().toJson(commandContainer));
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

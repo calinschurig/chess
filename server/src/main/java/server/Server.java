@@ -30,8 +30,9 @@ public class Server {
 
     public int run(int desiredPort) {
         Spark.port(desiredPort);
-        Spark.webSocket("/ws", WSServer.class);
         Spark.staticFiles.location("web");
+        Spark.webSocket("/ws", handler);
+        Spark.get("/echo/:msg", (req, res) -> "HTTP response: " + req.params(":msg"));
 
         Spark.before("/game", handler::authenticate);
 //        Spark.before("/ws", handler::authenticate);
@@ -44,7 +45,6 @@ public class Server {
         Spark.post("/game", handler::createGame);
         Spark.put("/game", handler::joinGame);
 
-        Spark.get("/echo/:msg", (req, res) -> "HTTP response: " + req.params(":msg"));
 
         Spark.get("/user", (req, res) -> {
             throw new DataAccessException("Testing exception handling");

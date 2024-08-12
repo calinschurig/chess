@@ -253,6 +253,14 @@ public class ChessClient {
 //            System.out.println("args[1]: " + args[1]);
             return "Invalid argument: color must be either WHITE or BLACK";
         }
+        try {
+            String wsUrl = facade.getUrlAsString().replaceFirst("http://", "ws://") + "ws";
+            System.out.println(wsUrl);
+            wsClient = new WSClient(wsUrl);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
         int gameId = gameIndextoId.get(gameNum);
         try {
             facade.joinGame(gameId, args[1].toUpperCase(), auth.authToken());
@@ -261,11 +269,7 @@ public class ChessClient {
         } catch (RejectedRequestException e) {
             throw new RuntimeException(e.getMessage());
         }
-        try {
-            wsClient = new WSClient(facade.getUrlAsString().replaceFirst("http://", "ws://") + "ws");
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
+
         currentGame = gameId;
         inGame = true;
         return "Joined game " + gameNum + " to " + args[1].toUpperCase();
