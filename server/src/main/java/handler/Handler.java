@@ -8,7 +8,7 @@ import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
 import dataaccess.UserDAO;
-import model.GameData;
+import model.AuthData;
 import model.UserData;
 import org.eclipse.jetty.websocket.api.*;
 import org.eclipse.jetty.websocket.api.annotations.*;
@@ -17,15 +17,15 @@ import service.GameService;
 import service.UserService;
 import spark.Request;
 import spark.Response;
-import websocket.commands.CommandContainer;
-import websocket.messages.ErrorMessage;
-import websocket.messages.LoadGameMessage;
-import websocket.messages.MessageContainer;
-import websocket.messages.ServerMessage;
+import websocket.commands.MakeMoveCommand;
+import websocket.commands.UserGameCommand;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import static handler.WsHandlerHelper.helperOnMessage;
+import static handler.WsHandlerHelper.sendError;
 
 @WebSocket
 public class Handler {
@@ -33,15 +33,57 @@ public class Handler {
     private final UserDAO userDAO;
     private final GameDAO gameDAO;
     private final AuthDAO authDAO;
+    private HashMap<Integer, HashSet<Session>> gameObservers = new HashMap<>();
+    private HashMap<Session, HashSet<Integer>> sessionGames = new HashMap<>();
 
     @OnWebSocketMessage
     public void onMessage(Session session, String message) throws Exception {
         System.out.printf("Received: %s", message);
-        session.getRemote().sendString("WebSocket response: " + message);
+//        session.getRemote().sendString("WebSocket response: " + message);
 
-        CommandContainer commandContainer = gson.fromJson(message, CommandContainer.class);
-        int gameId = commandContainer.userGameCommand.getGameID();
-        helperOnMessage(session, commandContainer, userDAO, gameDAO, authDAO);
+        UserGameCommand command;
+        try {
+            command = gson.fromJson(message, UserGameCommand.class);
+        } catch (JsonSyntaxException e) {
+            sendError("Error: bad request", session);
+            throw new RuntimeException("Bad JSON object: " + message);
+        }
+        if (command.getCommandType() == UserGameCommand.CommandType.MAKE_MOVE) {
+            try {
+                command = gson.fromJson(message, MakeMoveCommand.class);
+            } catch (JsonSyntaxException e) {
+                sendError("Error: bad request", session);
+                throw new RuntimeException("Bad JSON object: " + message);
+            }
+        }
+        checkGameId(command.getGameID());
+        addObserver(session, command);
+        try {
+            helperOnMessage(session, command, gameDAO, authDAO, gameObservers, sessionGames);
+        } catch (JsonSyntaxException e) {
+            sendError("Error: bad request", session);
+        }
+    }
+    private void addObserver(Session session, UserGameCommand command) {
+        gameObservers.computeIfAbsent(command.getGameID(), k -> new HashSet<>());
+        gameObservers.get(command.getGameID()).add(session);
+        sessionGames.computeIfAbsent(session, k -> new HashSet<>());
+        sessionGames.get(session).add(command.getGameID());
+    }
+    private void checkGameId(int gameId) {
+        if (gameDAO.get(gameId) == null) {
+            throw new RuntimeException("Invalid game ID. ");
+        }
+    }
+    @OnWebSocketClose
+    public void onClose(Session session, int status, String reason) {
+        if (!sessionGames.containsKey(session)) {
+            return;
+        }
+        for (Integer gameId : sessionGames.get(session)) {
+            gameObservers.get(gameId).remove(session);
+        }
+        sessionGames.remove(session);
     }
 
     public Handler(UserDAO userDAO, GameDAO gameDAO, AuthDAO authDAO) {

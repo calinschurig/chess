@@ -21,4 +21,14 @@ public record GameData(
     public int compareTo(Identifier<Integer> o) {
         return Integer.compare(this.getId(), o.getId());
     }
+
+    public GameData changeWhiteUsername(String newWhiteUsername) {
+        return new GameData(gameID, newWhiteUsername, blackUsername, gameName, game);
+    }
+    public GameData changeBlackUsername(String newBlackUsername) {
+        return new GameData(gameID, whiteUsername, newBlackUsername, gameName, game);
+    }
+    public GameData changeGame(ChessGame newGame) {
+        return new GameData(gameID, blackUsername, whiteUsername, gameName, newGame);
+    }
 }

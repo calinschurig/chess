@@ -131,7 +131,11 @@ public class ChessClient {
                 return redraw(args, wsClient, auth, currentGame);
             }
             case "leave" -> {
-                return leave(args);
+                leave(args, wsClient, auth, currentGame);
+                if (!wsClient.session.isOpen()) {
+                    inGame = false;
+                }
+                return "";
             }
             case "resign" -> {
                 return resign(args);

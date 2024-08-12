@@ -2,11 +2,17 @@ package server.facade;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import websocket.commands.CommandContainer;
+import websocket.commands.UserGameCommand;
+import websocket.messages.ErrorMessage;
+import websocket.messages.LoadGameMessage;
+import websocket.messages.NotificationMessage;
+import websocket.messages.ServerMessage;
 
 import javax.websocket.*;
 import java.net.URI;
 import java.util.Scanner;
+
+import static websocket.commands.UserGameCommand.CommandType.CONNECT;
 
 public class WSClient extends Endpoint {
     public Session session;
@@ -26,6 +32,7 @@ public class WSClient extends Endpoint {
         URI uri = new URI(uriString);
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
         this.session = container.connectToServer(this, uri);
+//        container.
 
         this.session.addMessageHandler(new MessageHandler.Whole<String>() {
             public void onMessage(String message) {
@@ -39,25 +46,25 @@ public class WSClient extends Endpoint {
     }
 
     public void messageHandler(String message) {
-        CommandContainer command = gson.fromJson(message, CommandContainer.class);
-        switch (command.commandType()) {
-            case CONNECT -> {
-
+        ServerMessage serverMessage = gson.fromJson(message, ServerMessage.class);
+        switch (serverMessage.getServerMessageType()) {
+            case ERROR -> {
+                ErrorMessage errorMessage = gson.fromJson(message, ErrorMessage.class);
+                System.out.println(errorMessage.getErrorMessage());
             }
-            case MAKE_MOVE -> {
-
+            case LOAD_GAME -> {
+                LoadGameMessage loadGameMessage = gson.fromJson(message, LoadGameMessage.class);
+                System.out.println("load_game todo");
             }
-            case LEAVE -> {
-
-            }
-            case RESIGN -> {
-
+            case NOTIFICATION -> {
+                NotificationMessage notificationMessage = gson.fromJson(message, NotificationMessage.class);
+                System.out.println(notificationMessage.getMessage());
             }
             case null, default -> {
-
+                System.out.println("error: bad message from server");
             }
         }
-        System.out.println(message);
+//        System.out.println(message);
     }
 
     public void onOpen(Session session, EndpointConfig endpointConfig) {

@@ -3,7 +3,6 @@ package ui;
 import com.google.gson.Gson;
 import model.AuthData;
 import server.facade.WSClient;
-import websocket.commands.CommandContainer;
 import websocket.commands.UserGameCommand;
 
 import javax.websocket.Session;
@@ -16,17 +15,28 @@ public class GameClient {
     public static String redraw(String[] args, WSClient wsClient, AuthData auth, int gameId) {
         checkArgs(new Class[] {}, args);
 //        UserGameCommand  command = new UserGameCommand();
-        CommandContainer commandContainer = new CommandContainer(UserGameCommand.CommandType.CONNECT, auth.authToken(), gameId);
+        UserGameCommand command = new UserGameCommand(UserGameCommand.CommandType.CONNECT, auth.authToken(), gameId);
         try {
-            wsClient.send(new Gson().toJson(commandContainer));
+            wsClient.send(new Gson().toJson(command));
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
         return "";
     }
-    public static String leave(String[] args) {
+    public static String leave(String[] args, WSClient wsClient, AuthData auth, int gameId) {
         checkArgs(new Class[] {}, args);
-        return "todo";
+//        UserGameCommand  command = new UserGameCommand();
+        UserGameCommand command = new UserGameCommand(UserGameCommand.CommandType.LEAVE, auth.authToken(), gameId);
+        try {
+            wsClient.send(new Gson().toJson(command));
+            wsClient.session.close();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+
+        }
+
+        return "";
     }
     public static String resign(String[] args) {
         checkArgs(new Class[] {}, args);
