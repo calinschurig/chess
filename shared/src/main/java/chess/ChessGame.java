@@ -67,6 +67,13 @@ public class ChessGame {
      * @return Set of valid moves for requested piece, or null if no piece at
      * startPosition
      */
+    public Collection<ChessPosition> validMovesZone(ChessPosition startPosition) {
+        HashSet<ChessPosition> endPositions = new HashSet<>();
+        for (ChessMove move : validMoves(startPosition)) {
+            endPositions.add(move.getEndPosition());
+        }
+        return endPositions;
+    }
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         HashSet<ChessMove> vmoves = new HashSet<>();
         if (board.getPiece(startPosition) == null) {

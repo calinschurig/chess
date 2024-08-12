@@ -298,7 +298,7 @@ public class ChessClient {
         }
         try {
             String wsUrl = facade.getUrlAsString().replaceFirst("http://", "ws://") + "ws";
-            System.out.println(wsUrl);
+//            System.out.println(wsUrl);
             wsClient = new WSClient(wsUrl, this::prompt);
             currentGame = gameId;
             inGame = true;
@@ -323,20 +323,22 @@ public class ChessClient {
             return "Invalid argument: please use numbers listed by the LIST command";
         }
         int gameId = gameIndextoId.get(gameNum);
-        try {
-            String out = ClientHelper.boardString(facade.gamesMap(auth).get(gameId), ChessGame.TeamColor.WHITE,
-                    EscapeSequences.SET_BG_COLOR_DARK_GREEN, EscapeSequences.SET_BG_COLOR_BLUE,
-                    EscapeSequences.SET_BG_COLOR_LIGHT_GREY)
-                    + "\n"
-                    + ClientHelper.boardString(facade.gamesMap(auth).get(gameId), ChessGame.TeamColor.BLACK,
-                    EscapeSequences.SET_BG_COLOR_DARK_GREEN, EscapeSequences.SET_BG_COLOR_BLUE,
-                    EscapeSequences.SET_BG_COLOR_LIGHT_GREY);
-            return out;
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        } catch (RejectedRequestException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+//        try {
+////            String out = ClientHelper.boardString(facade.gamesMap(auth).get(gameId), ChessGame.TeamColor.WHITE,
+////                    EscapeSequences.SET_BG_COLOR_DARK_GREEN, EscapeSequences.SET_BG_COLOR_BLUE,
+////                    EscapeSequences.SET_BG_COLOR_LIGHT_GREY)
+////                    + "\n"
+////                    + ClientHelper.boardString(facade.gamesMap(auth).get(gameId), ChessGame.TeamColor.BLACK,
+////                    EscapeSequences.SET_BG_COLOR_DARK_GREEN, EscapeSequences.SET_BG_COLOR_BLUE,
+////                    EscapeSequences.SET_BG_COLOR_LIGHT_GREY);
+//            String out = "todo";
+//            return out;
+//        } catch (IOException e) {
+//            throw new RuntimeException(e.getMessage());
+//        } catch (RejectedRequestException e) {
+//            throw new RuntimeException(e.getMessage());
+//        }
+        return "todo";
     }
 
 }

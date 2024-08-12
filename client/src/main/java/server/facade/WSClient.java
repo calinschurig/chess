@@ -1,8 +1,10 @@
 package server.facade;
 
+import chess.ChessGame;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.GameData;
+import ui.ClientHelper;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
@@ -62,7 +64,17 @@ public class WSClient extends Endpoint {
                 LoadGameMessage loadGameMessage = gson.fromJson(message, LoadGameMessage.class);
                 reprompt = true;
                 gameData = loadGameMessage.getGame();
-                System.out.println("load_game todo");
+                ChessGame.TeamColor orientation = ChessGame.TeamColor.WHITE;
+                System.out.println("load_game draw board");
+                String boardString = "";
+                try {
+                    boardString = ClientHelper.boardString(loadGameMessage.getGame(), null, ChessGame.TeamColor.WHITE);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                System.out.println(boardString);
+                System.out.println("completed drawing board");
             }
             case NOTIFICATION -> {
                 NotificationMessage notificationMessage = gson.fromJson(message, NotificationMessage.class);

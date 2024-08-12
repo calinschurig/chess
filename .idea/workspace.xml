@@ -4,13 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="77000de6-8a97-475d-b725-f7d6cae74905" name="Changes" comment="">
+    <list default="true" id="77000de6-8a97-475d-b725-f7d6cae74905" name="Changes" comment="Made the client less buggy, fixed the prompt.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/java/server/facade/WSClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/server/facade/WSClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/java/ui/ChessClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/ui/ChessClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/ui/ClientHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/ui/ClientHelper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/java/ui/GameClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/ui/GameClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/handler/Handler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/handler/Handler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/handler/WsHandlerHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/handler/WsHandlerHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shared/src/main/java/chess/ChessGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/shared/src/main/java/chess/ChessGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shared/src/main/java/chess/ChessPiece.java" beforeDir="false" afterPath="$PROJECT_DIR$/shared/src/main/java/chess/ChessPiece.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,60 +50,61 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Application.Main (1).executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.WSClient.executor&quot;: &quot;Run&quot;,
-    &quot;Application.WSServer.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.All in client.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.All in shared.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.BishopMoveTests.bishopBlocked.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.BishopMoveTests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.CastlingTests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.DatabaseTests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.KingMoveTests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.QueenMoveTests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.RookMoveTests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.SQLAuthDAOTests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.SQLGameDAOTests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.SQLGameDAOTests.validAdd.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.SQLGameDAOTests.validGet.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.SQLGameDAOTests.validUpdate (1).executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.SQLGameDAOTests.validUpdate.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.SQLParentDAOTests.clear.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.SQLParentDAOTests.emptyGetAll.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.SQLUserDAOTests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ServerFacadeTests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ServerFacadeTests.loginTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ServerFacadeTests.registerTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ServiceAPITests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.StandardAPITests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.dataaccess in server.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.java in server.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.java in shared.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.piece in shared.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.test in server.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.chess [compile].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.chess [test].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Calin/Documents/cs240/chess/server/src/test/java&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.46781608&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.archetype.catalogs&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Application.Main (1).executor": "Run",
+    "Application.Main.executor": "Run",
+    "Application.WSClient.executor": "Run",
+    "Application.WSServer.executor": "Run",
+    "JUnit.All in client.executor": "Run",
+    "JUnit.All in shared.executor": "Run",
+    "JUnit.BishopMoveTests.bishopBlocked.executor": "Run",
+    "JUnit.BishopMoveTests.executor": "Run",
+    "JUnit.CastlingTests.executor": "Run",
+    "JUnit.DatabaseTests.executor": "Run",
+    "JUnit.KingMoveTests.executor": "Run",
+    "JUnit.QueenMoveTests.executor": "Run",
+    "JUnit.RookMoveTests.executor": "Run",
+    "JUnit.SQLAuthDAOTests.executor": "Run",
+    "JUnit.SQLGameDAOTests.executor": "Run",
+    "JUnit.SQLGameDAOTests.validAdd.executor": "Run",
+    "JUnit.SQLGameDAOTests.validGet.executor": "Run",
+    "JUnit.SQLGameDAOTests.validUpdate (1).executor": "Run",
+    "JUnit.SQLGameDAOTests.validUpdate.executor": "Run",
+    "JUnit.SQLParentDAOTests.clear.executor": "Run",
+    "JUnit.SQLParentDAOTests.emptyGetAll.executor": "Run",
+    "JUnit.SQLUserDAOTests.executor": "Run",
+    "JUnit.ServerFacadeTests.executor": "Run",
+    "JUnit.ServerFacadeTests.loginTest.executor": "Run",
+    "JUnit.ServerFacadeTests.registerTest.executor": "Run",
+    "JUnit.ServiceAPITests.executor": "Run",
+    "JUnit.StandardAPITests.executor": "Run",
+    "JUnit.dataaccess in server.executor": "Run",
+    "JUnit.java in server.executor": "Run",
+    "JUnit.java in shared.executor": "Run",
+    "JUnit.piece in shared.executor": "Run",
+    "JUnit.test in server.executor": "Run",
+    "Maven.chess [compile].executor": "Run",
+    "Maven.chess [test].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "extract.method.default.visibility": "private",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Calin/Documents/cs240/chess/server/src/test/java",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.46781608",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.archetype.catalogs",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RdControllerToolWindowsLayoutState" isNewUi="true">
     <layout>
       <window_info id="Bookmarks" show_stripe_button="false" side_tool="true" />
@@ -258,15 +260,7 @@
       <workItem from="1723344282661" duration="5853000" />
       <workItem from="1723438536577" duration="6173000" />
       <workItem from="1723478198306" duration="11853000" />
-      <workItem from="1723496351250" duration="3140000" />
-    </task>
-    <task id="LOCAL-00007" summary="rolled back rel, added relUnsafe that allows out of bounds positions.">
-      <option name="closed" value="true" />
-      <created>1722281730552</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1722281730552</updated>
+      <workItem from="1723496351250" duration="7689000" />
     </task>
     <task id="LOCAL-00008" summary="Deleted isMoved flag on the piece.">
       <option name="closed" value="true" />
@@ -652,14 +646,21 @@
       <option name="project" value="LOCAL" />
       <updated>1723489489952</updated>
     </task>
-    <option name="localTasksCounter" value="56" />
+    <task id="LOCAL-00056" summary="Made the client less buggy, fixed the prompt.">
+      <option name="closed" value="true" />
+      <created>1723499614451</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1723499614451</updated>
+    </task>
+    <option name="localTasksCounter" value="57" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added comparable to Identifier so that GameData can be sorted." />
     <MESSAGE value="Implemented register and login tests." />
     <MESSAGE value="Added RejectedRequestException" />
     <MESSAGE value="Implemented register and login." />
@@ -684,7 +685,8 @@
     <MESSAGE value="Fixed websocket connections, stared implementing UserGameCommands" />
     <MESSAGE value="Removed MessageContainer.java and CommandContainer.java because I realized it would wreck the tests." />
     <MESSAGE value="Implemented joining and leaving games with the websocket." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented joining and leaving games with the websocket." />
+    <MESSAGE value="Made the client less buggy, fixed the prompt." />
+    <option name="LAST_COMMIT_MESSAGE" value="Made the client less buggy, fixed the prompt." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

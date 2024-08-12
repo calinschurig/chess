@@ -375,9 +375,12 @@ public class ChessPiece {
     }
 
     public String fancyToString() {
+        return fancyToString(EscapeSequences.SET_TEXT_COLOR_WHITE, EscapeSequences.SET_TEXT_COLOR_BLACK);
+    }
+    public String fancyToString(String whiteColor, String blackColor) {
         String toReturn = "";
         if (color == ChessGame.TeamColor.WHITE) {
-            toReturn += EscapeSequences.SET_TEXT_COLOR_WHITE;
+            toReturn += whiteColor;
             switch (type) {
                 case KING -> toReturn += EscapeSequences.WHITE_KING;
                 case QUEEN -> toReturn += EscapeSequences.WHITE_QUEEN;
@@ -388,7 +391,7 @@ public class ChessPiece {
                 default -> toReturn += EscapeSequences.EMPTY;
             }
         } else {
-            toReturn += EscapeSequences.SET_TEXT_COLOR_BLACK;
+            toReturn += blackColor;
             switch (type) {
                 case KING -> toReturn += EscapeSequences.BLACK_KING;
                 case QUEEN -> toReturn += EscapeSequences.BLACK_QUEEN;

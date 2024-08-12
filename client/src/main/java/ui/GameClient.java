@@ -61,6 +61,10 @@ public class GameClient {
                 help - with possible commands""";
         return output;
     }
+    public static String drawGame() {
+
+        return "todo";
+    }
 
     public static Session openWebsocket() {
 

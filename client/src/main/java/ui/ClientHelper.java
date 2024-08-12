@@ -1,12 +1,12 @@
 package ui;
 
 import chess.ChessGame;
+import chess.ChessMove;
 import chess.ChessPosition;
 import chess.EscapeSequences;
 import model.GameData;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 public class ClientHelper {
 
@@ -38,28 +38,36 @@ public class ClientHelper {
         }
     }
 
-    public static String boardRowString(int row, GameData game, ChessGame.TeamColor orientation,
-                                        String darkBoardColor, String lightBoardColor,
-                                        String outlineColor) {
+    public static String boardRowString(int row, GameData game, ChessPosition selectedPiece,
+                                        ChessGame.TeamColor orientation, Collection<ChessPosition> possibleEnds,
+                                        String whitePieceColor, String blackPieceColor,
+                                        String lightBoardColor, String darkBoardColor,
+                                        String movableLightBoardColor, String movableDarkBoardColor,
+                                        String selectedBoardColor, String outlineColor) {
         StringBuilder sb = new StringBuilder();
 
         final int start = orientation == ChessGame.TeamColor.WHITE? 0 : 9;
         final int end = orientation == ChessGame.TeamColor.WHITE? 10 : -1;
         final int dir = orientation == ChessGame.TeamColor.WHITE? 1 : -1;
+
         for (int i = start; i != end; i+=dir) {
             if (i == 0 | i == 9) {
                 sb.append(outlineColor).append("\u2005\u2004\u2005" + row + "\u2005\u2004\u2005");
             } else if ( (row + i) % 2 == 1) {
-                sb.append(lightBoardColor);
+                String color = (possibleEnds.contains(new ChessPosition(row, i))) ? movableLightBoardColor : lightBoardColor;
+                color = (Objects.equals(selectedPiece, new ChessPosition(row, i))) ? selectedBoardColor : color;
+                sb.append(color);
                 try {
-                    sb.append(game.game().getBoard().getPiece(new ChessPosition(row, i)).fancyToString());
+                    sb.append(game.game().getBoard().getPiece(new ChessPosition(row, i)).fancyToString(whitePieceColor, blackPieceColor));
                 } catch (NullPointerException e) {
                     sb.append(EscapeSequences.EMPTY);
                 }
             } else {
-                sb.append(darkBoardColor);
+                String color = (possibleEnds.contains(new ChessPosition(row, i))) ? movableDarkBoardColor : darkBoardColor;
+                color = (Objects.equals(selectedPiece, new ChessPosition(row, i))) ? selectedBoardColor : color;
+                sb.append(color);
                 try {
-                    sb.append(game.game().getBoard().getPiece(new ChessPosition(row, i)).fancyToString());
+                    sb.append(game.game().getBoard().getPiece(new ChessPosition(row, i)).fancyToString(whitePieceColor, blackPieceColor));
                 } catch (NullPointerException e) {
                     sb.append(EscapeSequences.EMPTY);
                 }
@@ -83,17 +91,37 @@ public class ClientHelper {
         return sb.toString();
     }
 
-    public static String boardString(GameData game, ChessGame.TeamColor orientation,
-                               String darkBoardColor, String lightBoardColor,
-                               String outlineColor) {
+    public static String boardString(GameData game, ChessPosition selectedPiece, ChessGame.TeamColor orientation) {
+        return boardString(game, selectedPiece, orientation,
+                EscapeSequences.SET_TEXT_COLOR_BLUE, EscapeSequences.SET_TEXT_COLOR_RED,
+                EscapeSequences.SET_BG_COLOR_LIGHT_GREY, EscapeSequences.SET_BG_COLOR_DARK_GREY,
+                EscapeSequences.SET_BG_COLOR_GREEN, EscapeSequences.SET_BG_COLOR_DARK_GREEN,
+                EscapeSequences.SET_BG_COLOR_YELLOW, EscapeSequences.SET_BG_COLOR_MAGENTA);
+    }
+    public static String boardString(GameData game, ChessPosition selectedPiece, ChessGame.TeamColor orientation,
+                               String whitePieceColor, String blackPieceColor,
+                               String lightBoardColor, String darkBoardColor,
+                               String selectedLightBoardColor, String selectedDarkBoardColor,
+                               String selectedBoardColor, String outlineColor) {
         StringBuilder sb = new StringBuilder();
 
         final int start = orientation == ChessGame.TeamColor.WHITE? 8 : 1;
         final int end = orientation == ChessGame.TeamColor.WHITE? 0 : 9;
         final int dir = orientation == ChessGame.TeamColor.WHITE? -1 : 1;
+        Collection<ChessPosition> possibleEnds;
+        if (selectedPiece != null) {
+            possibleEnds = game.game().validMovesZone(selectedPiece);
+        } else {
+            possibleEnds = HashSet.newHashSet(0);
+        }
         sb.append(outlineRowString(orientation, outlineColor)).append("\n");
         for (int i = start; i != end; i+=dir) {
-            sb.append(boardRowString(i, game, orientation, darkBoardColor, lightBoardColor, outlineColor));
+            sb.append(boardRowString(i, game, selectedPiece,
+                    orientation, possibleEnds,
+                    whitePieceColor, blackPieceColor,
+                    darkBoardColor, lightBoardColor,
+                    selectedLightBoardColor, selectedDarkBoardColor,
+                    selectedBoardColor, outlineColor));
             sb.append("\n");
         }
         sb.append(outlineRowString(orientation, outlineColor)).append("\n");
