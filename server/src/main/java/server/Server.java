@@ -9,6 +9,7 @@ import handler.InvalidAuthenticationException;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
+import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import spark.*;
 import handler.Handler;
 
@@ -29,10 +30,11 @@ public class Server {
 
     public int run(int desiredPort) {
         Spark.port(desiredPort);
-
+        Spark.webSocket("/ws", WSServer.class);
         Spark.staticFiles.location("web");
 
         Spark.before("/game", handler::authenticate);
+//        Spark.before("/ws", handler::authenticate);
 
         Spark.delete("/db", handler::clear);
         Spark.post("/user", handler::register);
@@ -41,6 +43,8 @@ public class Server {
         Spark.get("/game", handler::listGames);
         Spark.post("/game", handler::createGame);
         Spark.put("/game", handler::joinGame);
+
+        Spark.get("/echo/:msg", (req, res) -> "HTTP response: " + req.params(":msg"));
 
         Spark.get("/user", (req, res) -> {
             throw new DataAccessException("Testing exception handling");

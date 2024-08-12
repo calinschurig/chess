@@ -1,23 +1,27 @@
 package ui;
 
+import chess.ChessGame;
+import chess.EscapeSequences;
 import model.AuthData;
 import model.GameData;
 import server.facade.RejectedRequestException;
 import server.facade.ServerFacade;
+import server.facade.WSClient;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Scanner;
 
-import static ui.GameClient.helpGame;
-import static ui.GameClient.redraw;
+import static ui.GameClient.*;
 
 public class ChessClient {
     private ServerFacade facade;
+    private WSClient wsClient;
     private AuthData auth;
     private boolean loggedIn = false;
     private boolean inGame = false;
+    private int currentGame = -1;
     private boolean shouldQuit = false;
     private HashMap<Integer, Integer> gameIndextoId;
 
@@ -31,6 +35,8 @@ public class ChessClient {
     public ChessClient() {
         facade = new ServerFacade();
     }
+
+
 
     public void run(String hostUrl) {
         try {
@@ -103,10 +109,10 @@ public class ChessClient {
                 return listGames(args, facade, auth);
             }
             case "join" -> {
-                return LoggedInClient.joinGame(args, facade, auth, gameIndextoId);
+                return joinGame(args, facade, auth, gameIndextoId);
             }
             case "observe" -> {
-                return LoggedInClient.observeGame(args, facade, auth, gameIndextoId);
+                return observeGame(args, facade, auth, gameIndextoId);
             }
             case "quit" -> {
                 return quit(args);
@@ -123,16 +129,16 @@ public class ChessClient {
                 return redraw(args);
             }
             case "leave" -> {
-
+                return leave(args);
             }
             case "resign" -> {
-
+                return resign(args);
             }
             case "moves" -> {
-
+                return moves(args);
             }
             case "move" -> {
-
+                return move(args);
             }
             case "help" -> {
                 return helpGame(args);
@@ -141,7 +147,7 @@ public class ChessClient {
                 throw new RuntimeException("Invalid command. Type 'help' for a list of available commands. ");
             }
         }
-        return "todo";
+//        return "todo";
     }
 
     private static String helpPre(String[] args) {
@@ -230,6 +236,61 @@ public class ChessClient {
         }
         gameIndextoId = indexToId;
         return sb.toString();
+    }
+
+    private String joinGame(String[] args, ServerFacade facade, AuthData auth, HashMap<Integer, Integer> gameIndextoId) {
+        ClientHelper.checkArgs(new Class[] {int.class, String.class}, args);
+        if (gameIndextoId == null) {
+            return "Please list games before attempting to join. ";
+        }
+        int gameNum = Integer.parseInt(args[0]);
+        if (!gameIndextoId.containsKey(gameNum)) {
+            return "Invalid argument: please use numbers listed by the LIST command";
+        }
+        if (!args[1].equalsIgnoreCase("BLACK") && !args[1].equalsIgnoreCase("WHITE") ) {
+//            System.out.println("args[1]: " + args[1]);
+            return "Invalid argument: color must be either WHITE or BLACK";
+        }
+        int gameId = gameIndextoId.get(gameNum);
+        try {
+            facade.joinGame(gameId, args[1].toUpperCase(), auth.authToken());
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
+        } catch (RejectedRequestException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        try {
+            wsClient = new WSClient(facade.getUrlAsString() + "/ws");
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return "Joined game " + gameNum + " to " + args[1].toUpperCase();
+    }
+
+    public static String observeGame(String[] args, ServerFacade facade, AuthData auth, HashMap<Integer, Integer> gameIndextoId) {
+        ClientHelper.checkArgs(new Class[] {int.class}, args);
+        int gameNum = Integer.parseInt(args[0]);
+        if (gameIndextoId == null) {
+            return "Please list games before attempting to observe. ";
+        }
+        if (!gameIndextoId.containsKey(gameNum)) {
+            return "Invalid argument: please use numbers listed by the LIST command";
+        }
+        int gameId = gameIndextoId.get(gameNum);
+        try {
+            String out = ClientHelper.boardString(facade.gamesMap(auth).get(gameId), ChessGame.TeamColor.WHITE,
+                    EscapeSequences.SET_BG_COLOR_DARK_GREEN, EscapeSequences.SET_BG_COLOR_BLUE,
+                    EscapeSequences.SET_BG_COLOR_LIGHT_GREY)
+                    + "\n"
+                    + ClientHelper.boardString(facade.gamesMap(auth).get(gameId), ChessGame.TeamColor.BLACK,
+                    EscapeSequences.SET_BG_COLOR_DARK_GREEN, EscapeSequences.SET_BG_COLOR_BLUE,
+                    EscapeSequences.SET_BG_COLOR_LIGHT_GREY);
+            return out;
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
+        } catch (RejectedRequestException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
 }

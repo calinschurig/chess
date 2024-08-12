@@ -1,13 +1,28 @@
 package ui;
 
+import com.google.gson.Gson;
+import model.AuthData;
+import server.facade.WSClient;
+import websocket.commands.CommandContainer;
+import websocket.commands.UserGameCommand;
+
+import javax.websocket.Session;
+
 import static ui.ClientHelper.checkArgs;
 
 public class GameClient {
 
 
-    public static String redraw(String[] args) {
+    public static String redraw(String[] args, WSClient wsClient, AuthData auth, int gameId) {
         checkArgs(new Class[] {}, args);
-        return "todo";
+        UserGameCommand  command = new UserGameCommand(UserGameCommand.CommandType.CONNECT, auth.authToken(), gameId);
+        CommandContainer container = new CommandContainer(null, command, UserGameCommand.CommandType.CONNECT);
+        try {
+            wsClient.send(new Gson().toJson(container));
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return "";
     }
     public static String leave(String[] args) {
         checkArgs(new Class[] {}, args);
@@ -35,6 +50,11 @@ public class GameClient {
                 move <CURRENT_POSITION> <NEW_POSITION> - moves a piece from one position to the other
                 help - with possible commands""";
         return output;
+    }
+
+    public static Session openWebsocket() {
+
+        return null;
     }
 
 

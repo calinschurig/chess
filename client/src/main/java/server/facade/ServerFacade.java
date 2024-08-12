@@ -6,6 +6,7 @@ import model.AuthData;
 import model.GameData;
 import model.UserData;
 
+import javax.websocket.Session;
 import java.io.*;
 import java.net.*;
 import java.util.Collection;
@@ -182,6 +183,11 @@ public class ServerFacade {
         }
     }
 
+//    public Session openWebsocket() throws IOException {
+//        HttpURLConnection con = resolve("/ws");
+//        con.setRequestMethod("");
+//    }
+
     private HttpURLConnection resolve(String path) throws IOException {
         try {
             HttpURLConnection con = (HttpURLConnection) url.toURI().resolve(path).toURL().openConnection();
@@ -206,5 +212,11 @@ public class ServerFacade {
         String jsonStr = new String(con.getErrorStream().readAllBytes());
         return new Gson().fromJson(jsonStr, Message.class).message();
     }
+
+    public String getUrlAsString() {
+        return url.toString();
+    }
+
+
 
 }
