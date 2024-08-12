@@ -19,8 +19,10 @@ public class ChessClient {
     private ServerFacade facade;
     private WSClient wsClient;
     private AuthData auth;
+//    private GameData game = null;
     private boolean loggedIn = false;
     private boolean inGame = false;
+    private boolean defaultPrompt = true;
     private int currentGame = -1;
     private boolean shouldQuit = false;
     private HashMap<Integer, Integer> gameIndextoId;
@@ -49,7 +51,10 @@ public class ChessClient {
     public void run() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.print(prompt());
+            if (!inGame || defaultPrompt) {
+                System.out.print(prompt());
+            }
+            defaultPrompt = true;
 
             String line = scanner.nextLine();
             String command = ClientHelper.getCommand(line);
@@ -69,11 +74,31 @@ public class ChessClient {
     }
 
     private String prompt() {
-        return prompt(loggedIn);
+        return prompt(loggedIn, inGame);
     }
-    private String prompt(boolean isLoggedIn) {
+    private String prompt(boolean isLoggedIn, boolean isInGame) {
         String username = (isLoggedIn) ? auth.username() : "LOGGED_OUT";
-        return "[" + username + "]>>>";
+        if (!isInGame) {
+            return "[" + username + "]>>>";
+        }
+        if (wsClient.gameData == null) {
+            return "[" + username + ": LOADING_GAME]>>>";
+        }
+        StringBuilder toReturn = new StringBuilder();
+        toReturn.append("[" + username + ": " + wsClient.gameData.gameName() + " as ");
+        boolean isWhite = wsClient.gameData.whiteUsername() != null && wsClient.gameData.whiteUsername().equalsIgnoreCase(username);
+        boolean isBlack = wsClient.gameData.blackUsername() != null && wsClient.gameData.blackUsername().equalsIgnoreCase(username);
+        if (!isWhite && !isBlack) {
+            toReturn.append("OBSERVER");
+        } else if (isWhite && !isBlack) {
+            toReturn.append("WHITE");
+        } else if (isBlack && !isWhite) {
+            toReturn.append("BLACK");
+        } else if (isBlack && isWhite) {
+            toReturn.append("WHITE and BLACK");
+        }
+        toReturn.append("]>>>");
+        return toReturn.toString();
     }
 
     private String runCommandPre(String command, String[] args) {
@@ -128,14 +153,19 @@ public class ChessClient {
     public String runCommandGame(String command, String[] args) {
         switch (command) {
             case "redraw" -> {
-                return redraw(args, wsClient, auth, currentGame);
+                defaultPrompt = false;
+                connect(args, wsClient, auth, currentGame);
+                return "REDRAWING BOARD";
             }
             case "leave" -> {
+                if (!wsClient.session.isOpen()) {
+                    inGame = false;
+                }
                 leave(args, wsClient, auth, currentGame);
                 if (!wsClient.session.isOpen()) {
                     inGame = false;
                 }
-                return "";
+                return "LEAVING GAME";
             }
             case "resign" -> {
                 return resign(args);
@@ -257,15 +287,8 @@ public class ChessClient {
 //            System.out.println("args[1]: " + args[1]);
             return "Invalid argument: color must be either WHITE or BLACK";
         }
-        try {
-            String wsUrl = facade.getUrlAsString().replaceFirst("http://", "ws://") + "ws";
-            System.out.println(wsUrl);
-            wsClient = new WSClient(wsUrl);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
-        }
         int gameId = gameIndextoId.get(gameNum);
+
         try {
             facade.joinGame(gameId, args[1].toUpperCase(), auth.authToken());
         } catch (IOException e) {
@@ -273,9 +296,20 @@ public class ChessClient {
         } catch (RejectedRequestException e) {
             throw new RuntimeException(e.getMessage());
         }
+        try {
+            String wsUrl = facade.getUrlAsString().replaceFirst("http://", "ws://") + "ws";
+            System.out.println(wsUrl);
+            wsClient = new WSClient(wsUrl, this::prompt);
+            currentGame = gameId;
+            inGame = true;
+            defaultPrompt = false;
+            connect(new String[] {}, wsClient, auth, gameId);
+        } catch (Exception e) {
+//            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
 
-        currentGame = gameId;
-        inGame = true;
+
         return "Joined game " + gameNum + " to " + args[1].toUpperCase();
     }
 

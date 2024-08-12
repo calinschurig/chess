@@ -12,7 +12,7 @@ import static ui.ClientHelper.checkArgs;
 public class GameClient {
 
 
-    public static String redraw(String[] args, WSClient wsClient, AuthData auth, int gameId) {
+    public static String connect(String[] args, WSClient wsClient, AuthData auth, int gameId) {
         checkArgs(new Class[] {}, args);
 //        UserGameCommand  command = new UserGameCommand();
         UserGameCommand command = new UserGameCommand(UserGameCommand.CommandType.CONNECT, auth.authToken(), gameId);

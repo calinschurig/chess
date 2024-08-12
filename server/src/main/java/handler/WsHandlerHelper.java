@@ -68,10 +68,10 @@ public class WsHandlerHelper {
                                   HashMap<Integer, HashSet<Session>> gameObservers) throws IOException {
         GameData gameData = gameDAO.get(command.getGameID());
         String username = authDAO.get(command.getAuthToken()).username();
-        if (gameData.whiteUsername().equalsIgnoreCase(username)) {
+        if (gameData.whiteUsername() != null && gameData.whiteUsername().equalsIgnoreCase(username)) {
             gameData = gameData.changeWhiteUsername(null);
         }
-        if (gameData.blackUsername().equalsIgnoreCase(username)) {
+        if (gameData.blackUsername() != null && gameData.blackUsername().equalsIgnoreCase(username)) {
             gameData = gameData.changeBlackUsername(null);
         }
         String msg = username + " has left the game. ";

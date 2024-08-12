@@ -72,7 +72,7 @@ public class Handler {
     }
     private void checkGameId(int gameId) {
         if (gameDAO.get(gameId) == null) {
-            throw new RuntimeException("Invalid game ID. ");
+            throw new RuntimeException("Invalid game ID: " + gameId);
         }
     }
     @OnWebSocketClose
