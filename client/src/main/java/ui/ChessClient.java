@@ -176,7 +176,7 @@ public class ChessClient {
                 return moves(args, game, isWhite, isBlack);
             }
             case "move" -> {
-                return move(args);
+                return move(args, wsClient, auth, currentGame);
             }
             case "help" -> {
                 return helpGame(args);
