@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="77000de6-8a97-475d-b725-f7d6cae74905" name="Changes" comment="Implemented board drawing on LOAD_GAME server message.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/server/facade/WSClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/server/facade/WSClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/ui/ChessClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/ui/ChessClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/ui/GameClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/ui/GameClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/handler/Handler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/handler/Handler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/handler/WsHandlerHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/handler/WsHandlerHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/src/main/java/chess/ChessGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/shared/src/main/java/chess/ChessGame.java" afterDir="false" />
-    </list>
+    <list default="true" id="77000de6-8a97-475d-b725-f7d6cae74905" name="Changes" comment="fixed an error." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -268,23 +260,7 @@
       <workItem from="1723344282661" duration="5853000" />
       <workItem from="1723438536577" duration="6173000" />
       <workItem from="1723478198306" duration="11853000" />
-      <workItem from="1723496351250" duration="14617000" />
-    </task>
-    <task id="LOCAL-00009" summary="updated">
-      <option name="closed" value="true" />
-      <created>1722463044348</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1722463044348</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Clarified some field names.">
-      <option name="closed" value="true" />
-      <created>1722463074175</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1722463074175</updated>
+      <workItem from="1723496351250" duration="14820000" />
     </task>
     <task id="LOCAL-00011" summary="Implemented SQL DAOs.">
       <option name="closed" value="true" />
@@ -662,15 +638,29 @@
       <option name="project" value="LOCAL" />
       <updated>1723505190980</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="Tried to implement notifications.">
+      <option name="closed" value="true" />
+      <created>1723515830218</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1723515830218</updated>
+    </task>
+    <task id="LOCAL-00059" summary="fixed an error.">
+      <option name="closed" value="true" />
+      <created>1723515885952</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1723515885952</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added RejectedRequestException" />
-    <MESSAGE value="Implemented register and login." />
     <MESSAGE value="Improved map serialization for the jsons." />
     <MESSAGE value="Refactored joinGame to take gameId before playerColor." />
     <MESSAGE value="Implemented everything but observe game." />
@@ -694,7 +684,9 @@
     <MESSAGE value="Implemented joining and leaving games with the websocket." />
     <MESSAGE value="Made the client less buggy, fixed the prompt." />
     <MESSAGE value="Implemented board drawing on LOAD_GAME server message." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented board drawing on LOAD_GAME server message." />
+    <MESSAGE value="Tried to implement notifications." />
+    <MESSAGE value="fixed an error." />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed an error." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
