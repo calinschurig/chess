@@ -14,6 +14,7 @@ import websocket.messages.ServerMessage;
 import javax.websocket.*;
 import java.net.URI;
 import java.util.Scanner;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static websocket.commands.UserGameCommand.CommandType.CONNECT;
@@ -22,21 +23,23 @@ public class WSClient extends Endpoint {
     public Session session;
     public GameData gameData;
     public Supplier<String> prompt;
+    public Consumer<GameData> updateGame;
     private Gson gson = new GsonBuilder().enableComplexMapKeySerialization().serializeNulls().create();
     public static void main(String[] args) throws Exception {
-        var ws = new WSClient(() -> {return "prompt!";});
+        var ws = new WSClient(() -> {return "prompt!";}, (gameData) -> {});
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Enter a message you want to echo");
         while (true) ws.send(scanner.nextLine());
     }
 
-    public WSClient(Supplier<String> prompt) throws Exception {
-        this("ws://localhost:8080/ws", prompt);
+    public WSClient(Supplier<String> prompt, Consumer<GameData> updateGame) throws Exception {
+        this("ws://localhost:8080/ws", prompt, updateGame);
     }
-    public WSClient(String uriString, Supplier<String> prompt) throws Exception {
+    public WSClient(String uriString, Supplier<String> prompt, Consumer<GameData> updateGame) throws Exception {
         URI uri = new URI(uriString);
         this.prompt = prompt;
+        this.updateGame = updateGame;
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
         this.session = container.connectToServer(this, uri);
 //        container.
@@ -65,7 +68,7 @@ public class WSClient extends Endpoint {
                 reprompt = true;
                 gameData = loadGameMessage.getGame();
                 ChessGame.TeamColor orientation = ChessGame.TeamColor.WHITE;
-                System.out.println("load_game draw board");
+//                System.out.println("load_game draw board");
                 String boardString = "";
                 try {
                     boardString = ClientHelper.boardString(loadGameMessage.getGame(), null, ChessGame.TeamColor.WHITE);
@@ -73,8 +76,9 @@ public class WSClient extends Endpoint {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                updateGame.accept(gameData);
                 System.out.println(boardString);
-                System.out.println("completed drawing board");
+//                System.out.println("completed drawing board");
             }
             case NOTIFICATION -> {
                 NotificationMessage notificationMessage = gson.fromJson(message, NotificationMessage.class);

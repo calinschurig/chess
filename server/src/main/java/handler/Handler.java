@@ -36,6 +36,7 @@ public class Handler {
     private HashMap<Integer, HashSet<Session>> gameObservers = new HashMap<>();
     private HashMap<Session, HashSet<Integer>> sessionGames = new HashMap<>();
 
+
     @OnWebSocketMessage
     public void onMessage(Session session, String message) throws Exception {
         System.out.printf("Received: %s", message);
@@ -48,18 +49,20 @@ public class Handler {
             sendError("Error: bad request", session);
             throw new RuntimeException("Bad JSON object: " + message);
         }
+        MakeMoveCommand makeMoveCommand = null;
         if (command.getCommandType() == UserGameCommand.CommandType.MAKE_MOVE) {
             try {
-                command = gson.fromJson(message, MakeMoveCommand.class);
+                makeMoveCommand = gson.fromJson(message, MakeMoveCommand.class);
             } catch (JsonSyntaxException e) {
                 sendError("Error: bad request", session);
                 throw new RuntimeException("Bad JSON object: " + message);
             }
         }
         checkGameId(command.getGameID());
-        addObserver(session, command);
+
         try {
-            helperOnMessage(session, command, gameDAO, authDAO, gameObservers, sessionGames);
+            helperOnMessage(session, command, makeMoveCommand, gameDAO, authDAO, gameObservers, sessionGames);
+            addObserver(session, command);
         } catch (JsonSyntaxException e) {
             sendError("Error: bad request", session);
         }

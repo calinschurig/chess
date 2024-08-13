@@ -13,6 +13,7 @@ public class ChessGame {
     ChessBoard board;
     ArrayList<ChessMove> moves;
     TeamColor turn;
+    public boolean isOver = false;
 
     @Override
     public boolean equals(Object o) {
@@ -82,8 +83,8 @@ public class ChessGame {
         }
         TeamColor color = board.getPieceColor(startPosition);
         vmoves.addAll(board.getPieceMoves(startPosition));
-        enPresantMove(startPosition).ifPresent(moves::add);
-        vmoves.addAll(castleMoves(startPosition));
+//        enPresantMove(startPosition).ifPresent(moves::add); I removed this to remove the prints.
+//        vmoves.addAll(castleMoves(startPosition)); I removed this to remove the prints.
         HashSet<ChessMove> removes = new HashSet<>();
         for (ChessMove move : vmoves) {
             ChessBoard testBoard = ChessBoard.copy(board);

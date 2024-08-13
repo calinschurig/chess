@@ -19,9 +19,11 @@ public class ChessClient {
     private ServerFacade facade;
     private WSClient wsClient;
     private AuthData auth;
-//    private GameData game = null;
+    private GameData game = null;
     private boolean loggedIn = false;
     private boolean inGame = false;
+    private boolean isWhite = false;
+    private boolean isBlack = false;
     private boolean defaultPrompt = true;
     private int currentGame = -1;
     private boolean shouldQuit = false;
@@ -86,8 +88,8 @@ public class ChessClient {
         }
         StringBuilder toReturn = new StringBuilder();
         toReturn.append("[" + username + ": " + wsClient.gameData.gameName() + " as ");
-        boolean isWhite = wsClient.gameData.whiteUsername() != null && wsClient.gameData.whiteUsername().equalsIgnoreCase(username);
-        boolean isBlack = wsClient.gameData.blackUsername() != null && wsClient.gameData.blackUsername().equalsIgnoreCase(username);
+        isWhite = wsClient.gameData.whiteUsername() != null && wsClient.gameData.whiteUsername().equalsIgnoreCase(username);
+        isBlack = wsClient.gameData.blackUsername() != null && wsClient.gameData.blackUsername().equalsIgnoreCase(username);
         if (!isWhite && !isBlack) {
             toReturn.append("OBSERVER");
         } else if (isWhite && !isBlack) {
@@ -154,8 +156,8 @@ public class ChessClient {
         switch (command) {
             case "redraw" -> {
                 defaultPrompt = false;
-                connect(args, wsClient, auth, currentGame);
-                return "REDRAWING BOARD";
+//                connect(args, wsClient, auth, currentGame);
+                return redraw(args, wsClient, auth, currentGame);
             }
             case "leave" -> {
                 if (!wsClient.session.isOpen()) {
@@ -171,7 +173,7 @@ public class ChessClient {
                 return resign(args);
             }
             case "moves" -> {
-                return moves(args);
+                return moves(args, game, isWhite, isBlack);
             }
             case "move" -> {
                 return move(args);
@@ -299,7 +301,7 @@ public class ChessClient {
         try {
             String wsUrl = facade.getUrlAsString().replaceFirst("http://", "ws://") + "ws";
 //            System.out.println(wsUrl);
-            wsClient = new WSClient(wsUrl, this::prompt);
+            wsClient = new WSClient(wsUrl, this::prompt, this::updateGame);
             currentGame = gameId;
             inGame = true;
             defaultPrompt = false;
@@ -339,6 +341,12 @@ public class ChessClient {
 //            throw new RuntimeException(e.getMessage());
 //        }
         return "todo";
+    }
+
+    private void updateGame(GameData updateGame) {
+        game = updateGame;
+        isWhite = wsClient.gameData.whiteUsername() != null && wsClient.gameData.whiteUsername().equalsIgnoreCase(auth.username());
+        isBlack = wsClient.gameData.blackUsername() != null && wsClient.gameData.blackUsername().equalsIgnoreCase(auth.username());
     }
 
 }

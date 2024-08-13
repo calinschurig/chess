@@ -4,14 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="77000de6-8a97-475d-b725-f7d6cae74905" name="Changes" comment="Made the client less buggy, fixed the prompt.">
+    <list default="true" id="77000de6-8a97-475d-b725-f7d6cae74905" name="Changes" comment="Implemented board drawing on LOAD_GAME server message.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/java/server/facade/WSClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/server/facade/WSClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/java/ui/ChessClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/ui/ChessClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/ui/ClientHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/ui/ClientHelper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/java/ui/GameClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/ui/GameClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/handler/Handler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/handler/Handler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/handler/WsHandlerHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/handler/WsHandlerHelper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shared/src/main/java/chess/ChessGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/shared/src/main/java/chess/ChessGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/src/main/java/chess/ChessPiece.java" beforeDir="false" afterPath="$PROJECT_DIR$/shared/src/main/java/chess/ChessPiece.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,6 +80,7 @@
     "JUnit.ServerFacadeTests.registerTest.executor": "Run",
     "JUnit.ServiceAPITests.executor": "Run",
     "JUnit.StandardAPITests.executor": "Run",
+    "JUnit.WebSocketTests.executor": "Run",
     "JUnit.dataaccess in server.executor": "Run",
     "JUnit.java in server.executor": "Run",
     "JUnit.java in shared.executor": "Run",
@@ -163,7 +164,7 @@
       <command value="mvn compile" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="JUnit.WebSocketTests">
     <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="server" />
@@ -204,21 +205,28 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="All in client" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="client" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TEST_OBJECT" value="package" />
+    <configuration name="WebSocketTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="passoff.server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="passoff.server" />
+      <option name="MAIN_CLASS_NAME" value="passoff.server.WebSocketTests" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.WebSocketTests" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main (1)" />
         <item itemvalue="Application.WSClient" />
         <item itemvalue="Application.WSServer" />
-        <item itemvalue="JUnit.All in client" />
       </list>
     </recent_temporary>
   </component>
@@ -260,15 +268,7 @@
       <workItem from="1723344282661" duration="5853000" />
       <workItem from="1723438536577" duration="6173000" />
       <workItem from="1723478198306" duration="11853000" />
-      <workItem from="1723496351250" duration="7689000" />
-    </task>
-    <task id="LOCAL-00008" summary="Deleted isMoved flag on the piece.">
-      <option name="closed" value="true" />
-      <created>1722281760749</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1722281760749</updated>
+      <workItem from="1723496351250" duration="14617000" />
     </task>
     <task id="LOCAL-00009" summary="updated">
       <option name="closed" value="true" />
@@ -654,14 +654,21 @@
       <option name="project" value="LOCAL" />
       <updated>1723499614451</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="Implemented board drawing on LOAD_GAME server message.">
+      <option name="closed" value="true" />
+      <created>1723505190980</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1723505190980</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Implemented register and login tests." />
     <MESSAGE value="Added RejectedRequestException" />
     <MESSAGE value="Implemented register and login." />
     <MESSAGE value="Improved map serialization for the jsons." />
@@ -686,7 +693,8 @@
     <MESSAGE value="Removed MessageContainer.java and CommandContainer.java because I realized it would wreck the tests." />
     <MESSAGE value="Implemented joining and leaving games with the websocket." />
     <MESSAGE value="Made the client less buggy, fixed the prompt." />
-    <option name="LAST_COMMIT_MESSAGE" value="Made the client less buggy, fixed the prompt." />
+    <MESSAGE value="Implemented board drawing on LOAD_GAME server message." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented board drawing on LOAD_GAME server message." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
